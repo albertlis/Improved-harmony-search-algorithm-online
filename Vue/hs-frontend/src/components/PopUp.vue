@@ -27,21 +27,24 @@
 
         <v-card-text>
           <v-form class="px-3">
-            <v-text-field label="Function" v-model="func" prepend-icon="folder"> </v-text-field>
+            <v-text-field label="Function" v-model="func" prepend-icon="functions" required> </v-text-field>
           </v-form>
         </v-card-text>
 
         <v-divider></v-divider>
 
         <v-card-actions>
-          <v-spacer></v-spacer>
           <v-btn color="primary" text @click="clearFunctionField">Clear</v-btn>
+          <v-btn color="primary" text @click="dialog = false">
+            Next
+          </v-btn>
+          <v-spacer></v-spacer>
           <v-btn
             color="primary"
             text
             @click="dialog = false"
           >
-            Next
+            Close
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -53,7 +56,8 @@
 export default {
   data() {
     return {
-      func: ''
+      func: '',
+      dialog: false,
     }
   },
   methods: {
