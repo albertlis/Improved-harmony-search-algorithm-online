@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Vuelidate from 'vuelidate'
 import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
+Vue.use(Vuelidate)
 
   const routes = [
   {

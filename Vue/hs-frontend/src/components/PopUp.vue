@@ -26,15 +26,22 @@
         </v-card-title>
 
         <v-card-text>
-          <v-form class="px-3">
-            <v-text-field label="Function" v-model="func" prepend-icon="functions" required> </v-text-field>
+          <v-form class="px-3" ref="form" lazy-validation>
+            <v-text-field label="Function" 
+              v-model="func" 
+              prepend-icon="functions" 
+              required
+              :error-messages="funcErrors"
+              @input="$v.func.$touch()"
+              @blur="$v.func.$touch()"> 
+            </v-text-field>
           </v-form>
         </v-card-text>
 
         <v-divider></v-divider>
 
         <v-card-actions>
-          <v-btn color="primary" text @click="clearFunctionField">Clear</v-btn>
+          <v-btn color="primary" text @click="clearForm">Clear</v-btn>
           <v-btn color="primary" text @click="dialog = false">
             Next
           </v-btn>
@@ -53,17 +60,33 @@
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate'
+import { required } from 'vuelidate/lib/validators'
 export default {
+  mixins: [validationMixin],
+
   data() {
     return {
       func: '',
       dialog: false,
+      valid: true,
     }
   },
   methods: {
-    clearFunctionField: function () {
-      this.func = ''
+    clearForm: function () {
+      this.$refs.form.reset()
     }
+  },
+  validations: {
+    func: {required},
+  },
+  computed: { 
+    funcErrors () {
+        const errors = []
+        if (!this.$v.func.$dirty) return errors
+        !this.$v.func.required && errors.push('Function is required.')
+        return errors
+      },
   }
 }
 </script>
