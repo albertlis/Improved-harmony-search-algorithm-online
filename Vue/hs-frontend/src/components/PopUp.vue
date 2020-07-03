@@ -31,7 +31,7 @@
               v-model="func" 
               prepend-icon="functions" 
               :error-messages="funcErrors"
-              @input="$v.func.$touch()"
+              @change="$v.func.$touch()"
               @blur="$v.func.$touch()"> 
             </v-text-field>
             <v-text-field 
@@ -118,7 +118,7 @@ import { required, minValue, integer } from 'vuelidate/lib/validators'
 export default {
   data() {
     return {
-      func: '',
+      func: '(x + e * 10) / y',
       dialog: false,
       valid: true,
       numberOfIterations: 1000,
@@ -133,12 +133,8 @@ export default {
   methods: {
     clearForm: function () {
       this.$refs.form.reset();
-      this.HMS = 10;
-      this.numberOfIterations = 1000;
       this.HCMRRange = [0.5, 0.75];
       this.PARRange = [0.5, 0.75];
-      this.bwMinValue = 1.0;
-      this.bwMaxValue = 2.0;
     },
     getBwMaxValue: function () {
       return this.bwMaxValue;
@@ -149,10 +145,17 @@ export default {
         this.submitStatus = 'ERROR'
       } else {
         // do your submit logic here
-        this.submitStatus = 'PENDING'
+        const url = 'http://127.0.0.1:5000/compute';
+        const func = this.func.replace(/\s+/g, '');
+        const query = `${url}?function=${func}&iterations=${this.numberOfIterations}&hms=${this.HMS}`+
+                    `&hcmrmin=${this.HCMRRange[0]}&hcmrmax=${this.HCMRRange[1]}`+
+                    `&parmin=${this.PARRange[0]}&parmax=${this.PARRange[1]}`+
+                    `&bwmin=${this.bwMinValue}&bwmax=${this.bwMaxValue}`;
+        console.log(query);
+        this.submitStatus = 'PENDING';
         setTimeout(() => {
           this.submitStatus = 'OK'
-        }, 500)
+        }, 500);
       }
     }
   },
