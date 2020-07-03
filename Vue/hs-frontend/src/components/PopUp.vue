@@ -30,10 +30,25 @@
             <v-text-field label="Function" 
               v-model="func" 
               prepend-icon="functions" 
-              required
               :error-messages="funcErrors"
               @input="$v.func.$touch()"
               @blur="$v.func.$touch()"> 
+            </v-text-field>
+            <v-text-field 
+              v-model="numberOfIterations"
+              type="number"
+              label="Interations"
+              :error-messages="iterationsErrors"
+              @change="$v.numberOfIterations.$touch()"
+              @blur="$v.numberOfIterations.$touch()">
+            </v-text-field>
+            <v-text-field 
+              v-model="HMS"
+              type="number"
+              label="Interations"
+              :error-messages="HMSErrors"
+              @change="$v.HMS.$touch()"
+              @blur="$v.HMS.$touch()">
             </v-text-field>
           </v-form>
         </v-card-text>
@@ -61,7 +76,7 @@
 
 <script>
 import { validationMixin } from 'vuelidate'
-import { required } from 'vuelidate/lib/validators'
+import { required, minValue, integer } from 'vuelidate/lib/validators'
 export default {
   mixins: [validationMixin],
 
@@ -70,6 +85,8 @@ export default {
       func: '',
       dialog: false,
       valid: true,
+      numberOfIterations: 1000,
+      HMS: 10,
     }
   },
   methods: {
@@ -79,14 +96,40 @@ export default {
   },
   validations: {
     func: {required},
+    numberOfIterations : {
+      required,
+      minValue: minValue(1),
+      integer,
+    },
+    HMS: {
+      required,
+      minValue: minValue(1),
+      integer,
+    }
   },
   computed: { 
     funcErrors () {
-        const errors = []
-        if (!this.$v.func.$dirty) return errors
+      const errors = []
+      if (!this.$v.func.$dirty) return errors
         !this.$v.func.required && errors.push('Function is required.')
         return errors
-      },
+    },
+    iterationsErrors () {
+      const errors = []
+      if (!this.$v.numberOfIterations.$dirty) return errors
+        !this.$v.numberOfIterations.required && errors.push('Iterations is required.')
+        !this.$v.numberOfIterations.minValue && errors.push('Iterations have to be more than 0')
+        !this.$v.numberOfIterations.integer && errors.push('Iterations have to be integer value')
+        return errors
+    },
+    HMSErrors () {
+      const errors = []
+      if (!this.$v.HMS.$dirty) return errors
+        !this.$v.HMS.required && errors.push('HMS is required.')
+        !this.$v.HMS.minValue && errors.push('HMS have to be more than 0')
+        !this.$v.HMS.integer && errors.push('HMS have to be integer value')
+        return errors
+    }
   }
 }
 </script>
