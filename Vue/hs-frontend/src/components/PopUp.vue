@@ -26,7 +26,7 @@
         </v-card-title>
 
         <v-card-text>
-          <v-form class="px-3" ref="form" lazy-validation>
+          <v-form class="px-3" ref="form">
             <v-text-field label="Function" 
               v-model="func" 
               prepend-icon="functions" 
@@ -98,9 +98,7 @@
 
         <v-card-actions>
           <v-btn color="primary" text @click="clearForm">Clear</v-btn>
-          <v-btn color="primary" text @click="dialog = false">
-            Next
-          </v-btn>
+          <v-btn color="primary" text @click="goNext">Next</v-btn>
           <v-spacer></v-spacer>
           <v-btn
             color="primary"
@@ -116,11 +114,8 @@
 </template>
 
 <script>
-import { validationMixin } from 'vuelidate'
-import { required, minValue, integer, maxValue } from 'vuelidate/lib/validators'
+import { required, minValue, integer } from 'vuelidate/lib/validators'
 export default {
-  mixins: [validationMixin],
-
   data() {
     return {
       func: '',
@@ -132,6 +127,7 @@ export default {
       PARRange: [0.2, 0.8],
       bwMinValue: 1.0,
       bwMaxValue: 2.0,
+      submitStatus: null
     }
   },
   methods: {
@@ -146,6 +142,18 @@ export default {
     },
     getBwMaxValue: function () {
       return this.bwMaxValue;
+    },
+    goNext: function () {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        this.submitStatus = 'ERROR'
+      } else {
+        // do your submit logic here
+        this.submitStatus = 'PENDING'
+        setTimeout(() => {
+          this.submitStatus = 'OK'
+        }, 500)
+      }
     }
   },
   validations: {
@@ -163,12 +171,10 @@ export default {
     bwMinValue: {
       required,
       minValue: minValue(0),
-      // maxValue: maxValue(10)
     },
     bwMaxValue: {
       required,
       minValue: minValue(0),
-      maxValue: maxValue(10)
     }
   },
   computed: { 
