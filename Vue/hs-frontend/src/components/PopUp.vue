@@ -45,11 +45,52 @@
             <v-text-field 
               v-model="HMS"
               type="number"
-              label="Interations"
+              label="HMS"
               :error-messages="HMSErrors"
               @change="$v.HMS.$touch()"
               @blur="$v.HMS.$touch()">
             </v-text-field>
+            <v-row class="my-4">
+              <v-range-slider
+                v-model="HCMRRange"
+                thumb-label="always"
+                min=0
+                max=1
+                step=0.01
+                thumb-size=28
+                label="HCMR">
+              </v-range-slider>
+            </v-row>
+            <v-row class="my-2">
+              <v-range-slider
+                v-model="PARRange"
+                thumb-label="always"
+                min=0
+                max=1
+                step=0.01
+                thumb-size=28
+                label="PAR">
+              </v-range-slider>
+            </v-row>
+            <v-row>
+              <v-text-field 
+                v-model="bwMinValue"
+                type="number"
+                label="Bw min"
+                :error-messages="bwMinErrors"
+                @change="$v.bwMinValue.$touch()"
+                @blur="$v.bwMinValue.$touch()">
+              </v-text-field>
+              <v-spacer></v-spacer>
+              <v-text-field 
+                v-model="bwMaxValue"
+                type="number"
+                label="Bw max"
+                :error-messages="bwMaxErrors"
+                @change="$v.bwMaxValue.$touch()"
+                @blur="$v.bwMaxValue.$touch()">
+              </v-text-field>
+            </v-row>
           </v-form>
         </v-card-text>
 
@@ -76,7 +117,7 @@
 
 <script>
 import { validationMixin } from 'vuelidate'
-import { required, minValue, integer } from 'vuelidate/lib/validators'
+import { required, minValue, integer, maxValue } from 'vuelidate/lib/validators'
 export default {
   mixins: [validationMixin],
 
@@ -87,11 +128,24 @@ export default {
       valid: true,
       numberOfIterations: 1000,
       HMS: 10,
+      HCMRRange: [0.5, 0.75],
+      PARRange: [0.2, 0.8],
+      bwMinValue: 1.0,
+      bwMaxValue: 2.0,
     }
   },
   methods: {
     clearForm: function () {
-      this.$refs.form.reset()
+      this.$refs.form.reset();
+      this.HMS = 10;
+      this.numberOfIterations = 1000;
+      this.HCMRRange = [0.5, 0.75];
+      this.PARRange = [0.5, 0.75];
+      this.bwMinValue = 1.0;
+      this.bwMaxValue = 2.0;
+    },
+    getBwMaxValue: function () {
+      return this.bwMaxValue;
     }
   },
   validations: {
@@ -105,6 +159,16 @@ export default {
       required,
       minValue: minValue(1),
       integer,
+    },
+    bwMinValue: {
+      required,
+      minValue: minValue(0),
+      // maxValue: maxValue(10)
+    },
+    bwMaxValue: {
+      required,
+      minValue: minValue(0),
+      maxValue: maxValue(10)
     }
   },
   computed: { 
@@ -128,6 +192,24 @@ export default {
         !this.$v.HMS.required && errors.push('HMS is required.')
         !this.$v.HMS.minValue && errors.push('HMS have to be more than 0')
         !this.$v.HMS.integer && errors.push('HMS have to be integer value')
+        return errors
+    },
+    bwMinErrors () {
+      const errors = []
+      if (!this.$v.bwMinValue.$dirty) return errors
+        !this.$v.bwMinValue.required && errors.push('Bw min  is required.')
+        !this.$v.bwMinValue.minValue && errors.push('Bw min  have to be more than 0')
+        if(this.bwMinValue >= this.bwMaxValue)
+          errors.push('Bw min have to be less than Bw max')
+        return errors
+    },
+    bwMaxErrors () {
+      const errors = []
+      if (!this.$v.bwMaxValue.$dirty) return errors
+        !this.$v.bwMaxValue.required && errors.push('bwMax is required.')
+        !this.$v.bwMaxValue.minValue && errors.push('bwMax have to be more than 0')
+        if(this.bwMinValue >= this.bwMaxValue)
+          errors.push('Bw max have to be more than Bw min')
         return errors
     }
   }
