@@ -127,7 +127,7 @@ export default {
       PARRange: [0.2, 0.8],
       bwMinValue: 1.0,
       bwMaxValue: 2.0,
-      submitStatus: null
+      submitStatus: null,
     }
   },
   methods: {
@@ -139,24 +139,39 @@ export default {
     getBwMaxValue: function () {
       return this.bwMaxValue;
     },
-    goNext: function () {
+    goNext: async function () {
       this.$v.$touch()
       if (this.$v.$invalid) {
         this.submitStatus = 'ERROR'
       } else {
         // do your submit logic here
-        const url = 'http://127.0.0.1:5000/compute';
-        const func = this.func.replace(/\s+/g, '');
-        const query = `${url}?function=${func}&iterations=${this.numberOfIterations}&hms=${this.HMS}`+
-                    `&hcmrmin=${this.HCMRRange[0]}&hcmrmax=${this.HCMRRange[1]}`+
-                    `&parmin=${this.PARRange[0]}&parmax=${this.PARRange[1]}`+
-                    `&bwmin=${this.bwMinValue}&bwmax=${this.bwMaxValue}`;
-        console.log(query);
-        this.submitStatus = 'PENDING';
-        setTimeout(() => {
-          this.submitStatus = 'OK'
-        }, 500);
+        const {message, variables} = await this.processFunction()
+        console.log(message, variables);
+        this.submitStatus = 'OK'
       }
+    },
+    prepareCheckFunctionQuery() {
+      const url = 'http://127.0.0.1:5000/checkfunction';
+      const func = this.func.replace(/\s+/g, '');
+      const query = `${url}?function=${func}&iterations=${this.numberOfIterations}&hms=${this.HMS}`+
+                  `&hcmrmin=${this.HCMRRange[0]}&hcmrmax=${this.HCMRRange[1]}`+
+                  `&parmin=${this.PARRange[0]}&parmax=${this.PARRange[1]}`+
+                  `&bwmin=${this.bwMinValue}&bwmax=${this.bwMaxValue}`;
+      return query;
+    },
+    processFunction () {
+      const query = this.prepareCheckFunctionQuery();
+      return fetch(query, {mode: 'cors'}).then(response => {
+        if(response.ok) {
+          return response.json();
+        }
+        throw new Error('Request failed');
+      }).then(jsonResponse => {
+        const jsonString = JSON.stringify(jsonResponse);
+        return JSON.parse(jsonString);
+      }).catch((error) => {
+        console.error('Error:', error);
+      });
     }
   },
   validations: {
