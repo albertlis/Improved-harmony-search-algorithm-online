@@ -16,99 +16,100 @@
           Start
         </v-btn>
       </template>
-
-      <v-card>
-        <v-card-title
-          class="headline grey lighten-2"
-          primary-title
-        >
+      <v-stepper v-model="e6" vertical>
+        <v-stepper-step :complete="e6 > 1" step="1">
           Set parameters
-        </v-card-title>
+        </v-stepper-step>
 
-        <v-card-text>
-          <v-form class="px-3" ref="form">
-            <v-text-field label="Function" 
-              v-model="func" 
-              prepend-icon="functions" 
-              :error-messages="funcErrors"
-              @change="$v.func.$touch()"
-              @blur="$v.func.$touch()"> 
-            </v-text-field>
-            <v-text-field 
-              v-model="numberOfIterations"
-              type="number"
-              label="Interations"
-              :error-messages="iterationsErrors"
-              @change="$v.numberOfIterations.$touch()"
-              @blur="$v.numberOfIterations.$touch()">
-            </v-text-field>
-            <v-text-field 
-              v-model="HMS"
-              type="number"
-              label="HMS"
-              :error-messages="HMSErrors"
-              @change="$v.HMS.$touch()"
-              @blur="$v.HMS.$touch()">
-            </v-text-field>
-            <v-row class="my-4">
-              <v-range-slider
-                v-model="HCMRRange"
-                thumb-label="always"
-                min=0
-                max=1
-                step=0.01
-                thumb-size=28
-                label="HCMR">
-              </v-range-slider>
-            </v-row>
-            <v-row class="my-2">
-              <v-range-slider
-                v-model="PARRange"
-                thumb-label="always"
-                min=0
-                max=1
-                step=0.01
-                thumb-size=28
-                label="PAR">
-              </v-range-slider>
-            </v-row>
-            <v-row>
-              <v-text-field 
-                v-model="bwMinValue"
-                type="number"
-                label="Bw min"
-                :error-messages="bwMinErrors"
-                @change="$v.bwMinValue.$touch()"
-                @blur="$v.bwMinValue.$touch()">
-              </v-text-field>
-              <v-spacer></v-spacer>
-              <v-text-field 
-                v-model="bwMaxValue"
-                type="number"
-                label="Bw max"
-                :error-messages="bwMaxErrors"
-                @change="$v.bwMaxValue.$touch()"
-                @blur="$v.bwMaxValue.$touch()">
-              </v-text-field>
-            </v-row>
-          </v-form>
-        </v-card-text>
+        <v-stepper-content step="1">
+          <v-card>
+            <v-card-text>
+              <v-form class="px-3" ref="form">
+                <v-text-field label="Function" 
+                  v-model="func" 
+                  prepend-icon="functions" 
+                  :error-messages="funcErrors"
+                  @change="$v.func.$touch()"
+                  @blur="$v.func.$touch()"> 
+                </v-text-field>
+                <v-text-field 
+                  v-model="numberOfIterations"
+                  type="number"
+                  label="Interations"
+                  :error-messages="iterationsErrors"
+                  @change="$v.numberOfIterations.$touch()"
+                  @blur="$v.numberOfIterations.$touch()">
+                </v-text-field>
+                <v-text-field 
+                  v-model="HMS"
+                  type="number"
+                  label="HMS"
+                  :error-messages="HMSErrors"
+                  @change="$v.HMS.$touch()"
+                  @blur="$v.HMS.$touch()">
+                </v-text-field>
+                <v-row class="my-4">
+                  <v-range-slider
+                    v-model="HCMRRange"
+                    thumb-label="always"
+                    min=0
+                    max=1
+                    step=0.01
+                    thumb-size=28
+                    label="HCMR">
+                  </v-range-slider>
+                </v-row>
+                <v-row class="my-2">
+                  <v-range-slider
+                    v-model="PARRange"
+                    thumb-label="always"
+                    min=0
+                    max=1
+                    step=0.01
+                    thumb-size=28
+                    label="PAR">
+                  </v-range-slider>
+                </v-row>
+                <v-row>
+                  <v-text-field 
+                    v-model="bwMinValue"
+                    type="number"
+                    label="Bw min"
+                    :error-messages="bwMinErrors"
+                    @change="$v.bwMinValue.$touch()"
+                    @blur="$v.bwMinValue.$touch()">
+                  </v-text-field>
+                  <v-spacer></v-spacer>
+                  <v-text-field 
+                    v-model="bwMaxValue"
+                    type="number"
+                    label="Bw max"
+                    :error-messages="bwMaxErrors"
+                    @change="$v.bwMaxValue.$touch()"
+                    @blur="$v.bwMaxValue.$touch()">
+                  </v-text-field>
+                </v-row>
+              </v-form>
+            </v-card-text>
+          </v-card>
+          <v-row>
+            <v-btn color="primary" class="ma-2 ml-5" @click="goNext()">Continue</v-btn>
+            <v-btn text class="my-2" @click="clearForm">Clear</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn text class="ma-2 mr-5" @click="dialog = false">Cancel</v-btn>
+          </v-row>
+        </v-stepper-content>
 
-        <v-divider></v-divider>
+        <v-stepper-step :complete="e6 > 2" step="2">Set variables range</v-stepper-step>
 
-        <v-card-actions>
-          <v-btn color="primary" text @click="clearForm">Clear</v-btn>
-          <v-btn color="primary" text @click="goNext">Next</v-btn>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="dialog = false"
-          >
-            Close
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+        <v-stepper-content step="2">
+          <v-card color="grey lighten-1" class="mb-12" height="200px"></v-card>
+          <v-btn color="primary" @click="e6 = 3">Continue</v-btn>
+          <v-btn @click="e6 = 1">Previous</v-btn>
+          <v-btn text @click="dialog = false">Cancel</v-btn>
+        </v-stepper-content>
+      </v-stepper>
+      
     </v-dialog>
   </div>
 </template>
@@ -128,6 +129,8 @@ export default {
       bwMinValue: 1.0,
       bwMaxValue: 2.0,
       submitStatus: null,
+      buttonLoading: false,
+      e6: 1,
     }
   },
   methods: {
@@ -145,11 +148,18 @@ export default {
         this.submitStatus = 'ERROR'
       } else {
         // do your submit logic here
+        this.buttonLoading = true;
         const {message, variables} = await this.processFunction()
         console.log(message, variables);
         this.submitStatus = 'OK'
+        // await this.sleep(3000);
+        this.buttonLoading = false;
+        this.e6 = 2;
       }
     },
+    // sleep(ms) {
+      // return new Promise(resolve => setTimeout(resolve, ms));
+    // },
     prepareCheckFunctionQuery() {
       const url = 'http://127.0.0.1:5000/checkfunction';
       const func = this.func.replace(/\s+/g, '');
