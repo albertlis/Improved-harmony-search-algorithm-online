@@ -7,7 +7,7 @@ import Result from '../views/Result.vue'
 Vue.use(VueRouter)
 Vue.use(Vuelidate)
 
-  const routes = [
+const routes = [
   {
     path: '/',
     name: 'Home',
@@ -26,4 +26,4 @@ const router = new VueRouter({
   routes
 })
 
-export default router
+export default router;

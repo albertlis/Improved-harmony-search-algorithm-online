@@ -184,8 +184,10 @@ export default {
         this.calculateButtonLoading = true;
         const query = this.prepareCalculateFunctionQuery();
         const response = await this.sendGetRequest(query);
-        console.log(response.optimalVariables);
         this.step = 1;
+        this.$store.commit('setFunctionInformations', response);
+        // console.log(this.$store.getters.solvedFunctionInformations);
+        // await this.sleep(3000);
         this.calculateButtonLoading = false;
         this.dialog = false;
         window.location.href="/result";
