@@ -25,3 +25,4 @@ pnpm-debug.log*
 *.png
 *.svg
 Python/__pycache__/VariablesParser.cpython-38.pyc
+__pycache__/

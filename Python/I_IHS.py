@@ -48,14 +48,14 @@ class I_IHSAlgorithm(IHSAlgorithm):
         """
         IHSAlgorithm.__init__(self)
         assert len(parameters) == 9
-        self.setHMCR(parameters[3:5])
-        self.setPAR(parameters[5:7])
-        self.setBW(parameters[7:9])
-        self.setHMS(parameters[2])
-        self.setNumOfIterations(parameters[1])
-        self.setVariables(parameters[0])
+        self.setHMCR([parameters['hcmrmin'], parameters['hcmrmax']])
+        self.setPAR([parameters['parmin'], parameters['parmax']])
+        self.setBW([parameters['bwmin'], parameters['bwmax']])
+        self.setHMS(parameters['hms'])
+        self.setNumOfIterations(parameters['iterations'])
+        self.setVariables(parameters['function'])
         self._setDefaultBounds()
-        self.setFunction(parameters[0])
+        self.setFunction(parameters['function'])
 
     # W setterach poustawiać granice w jakich mogą się znaleźć dane parametry
     def setHMCR(self, HMCR):

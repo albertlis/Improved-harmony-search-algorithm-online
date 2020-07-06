@@ -8,6 +8,8 @@ Created on Thu Mar 26 17:10:54 2020
 from pprint import pprint
 
 import numpy as np
+from flask import jsonify
+
 '''
 
     IHSAlgorithm to klasa obsługująca całą logikę algorytmu z założeniem,
@@ -143,10 +145,10 @@ class IHSAlgorithm:
         index = np.argmin(self._f)
         functionValue = self._f[index]
         variables = self._HM[index]
-        preparedVariables = []
+        preparedVariables = dict()
         for key, value in variables.items():
             try:
-                preparedVariables.append(f'{key}:\t{value}')
+                preparedVariables[key] = value
             except TypeError as e:
                 print(e)
                 return
