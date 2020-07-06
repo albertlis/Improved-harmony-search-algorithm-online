@@ -9,22 +9,13 @@
           transition="scale-transition"
           width="150"
           />
-          <h1>Improved harmony search alghoritm</h1>
-          <p>
-            is a metaheurestic alghoritm for solving problems. In this webpage it can solve linear and non linear equations.
-          </p>
-          <PopUp/>
         </v-col>
       </v-row>
     </v-container> 
 </template>
 
 <script>
-import PopUp from '@/components/PopUp'
 export default {
-  name: 'Home',
-  components: {
-    PopUp
-  }
+  name: 'Result',
 }
 </script>

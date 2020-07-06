@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuelidate from 'vuelidate'
 import Home from '../views/Home.vue'
+import Result from '../views/Result.vue'
 
 Vue.use(VueRouter)
 Vue.use(Vuelidate)
@@ -11,6 +12,11 @@ Vue.use(Vuelidate)
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/result',
+    name: "Result",
+    component: Result
   }
 ]
 

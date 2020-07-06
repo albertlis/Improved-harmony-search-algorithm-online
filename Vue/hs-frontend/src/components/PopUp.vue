@@ -93,7 +93,7 @@
             </v-card-text>
           </v-card>
           <v-row>
-            <v-btn color="primary" class="ma-2 ml-5" @click="goNext()">Continue</v-btn>
+            <v-btn color="primary" class="ma-2 ml-5" :loading="nextButtonLoading" @click="goNext()">Continue</v-btn>
             <v-btn text class="my-2" @click="clearForm">Clear</v-btn>
             <v-spacer></v-spacer>
             <v-btn text class="ma-2 mr-5" @click="dialog = false">Cancel</v-btn>
@@ -123,14 +123,13 @@
             </v-card-text>
           </v-card>
           <v-row>
-            <v-btn color="primary" class="ma-2 ml-5" @click="step = 3; calculate()">Calculate</v-btn>
+            <v-btn color="primary" class="ma-2 ml-5" :loading="calculateButtonLoading" @click="step = 3; calculate()">Calculate</v-btn>
             <v-btn text class="my-2" @click="step = 1">Previous</v-btn>
             <v-spacer></v-spacer>
             <v-btn text class="ma-2 mr-5" @click="dialog = false">Cancel</v-btn>
           </v-row>
         </v-stepper-content>
       </v-stepper>
-      
     </v-dialog>
   </div>
 </template>
@@ -149,7 +148,8 @@ export default {
       PARRange: [0.2, 0.8],
       bwMinValue: 1.0,
       bwMaxValue: 2.0,
-      buttonLoading: false,
+      nextButtonLoading: false,
+      calculateButtonLoading: false,
       step: 1,
       message: '', 
       variables: null,
@@ -168,22 +168,27 @@ export default {
     goNext: async function () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
-        this.buttonLoading = true;
+        this.nextButtonLoading = true;
         const query = this.prepareCheckFunctionQuery();
         const {message, variables} = await this.sendGetRequest(query);
         this.message = message;
         this.variables = variables;
         // await this.sleep(3000);
-        this.buttonLoading = false;
+        this.nextButtonLoading = false;
         this.step = 2;
       }
     },
     calculate: async function () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
+        this.calculateButtonLoading = true;
         const query = this.prepareCalculateFunctionQuery();
         const response = await this.sendGetRequest(query);
         console.log(response.optimalVariables);
+        this.step = 1;
+        this.calculateButtonLoading = false;
+        this.dialog = false;
+        window.location.href="/result";
       }
     },
     // sleep(ms) {

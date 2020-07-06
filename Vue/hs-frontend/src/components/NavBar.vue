@@ -8,12 +8,12 @@
       <v-spacer></v-spacer>
       <div class="d-flex align-center">
         <v-img
-          alt="Vuetify Logo"
+          alt="HS Logo"
           class="shrink mr-2"
           contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          src="../assets/logoHS.png"
           transition="scale-transition"
-          width="30"
+          width="50"
         />
         <v-toolbar-title>Harmony search alghoritm</v-toolbar-title>
       </div>
