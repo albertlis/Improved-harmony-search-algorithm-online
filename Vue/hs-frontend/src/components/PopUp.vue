@@ -187,7 +187,6 @@ export default {
         this.step = 1;
         this.$store.commit('setFunctionInformations', response);
         this.$store.commit('setVariablesBandwidth', this.variablesBandwidth);
-        // console.log(this.$store.getters.solvedFunctionInformations);
         // await this.sleep(3000);
         this.calculateButtonLoading = false;
         this.dialog = false;

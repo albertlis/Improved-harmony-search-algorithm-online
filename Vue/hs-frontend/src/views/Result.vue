@@ -1,10 +1,33 @@
 <template>
-    <v-container fill-height>
-      <v-row align="center">
-        <v-col align="center">
-          <v-btn @click="onClick()">test</v-btn>
+    <v-container>
+      <v-row justify="center">
+        <v-card class="mt-5" >
+          <v-card-title>
+              Solution
+          </v-card-title>
+          <v-card-text>
+            <v-list-item dense>
+              <v-list-item-content>
+                <v-list-item-title>Function value: {{ functionValue }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item dense>
+              <v-list-item-content>
+                <v-list-item-title>Iterations: {{ iterations }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item dense v-for="varName in variablesNames" :key="varName">
+              <v-list-item-content>
+                <v-list-item-title>{{ varName }}: {{ optimalPiont[varName] }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-card-text>
+        </v-card>
+      </v-row>
+      <v-row class="my-1" justify="center">
+        <div>
           <Plotly :data="calculatedData" :layout="layout" :display-mode-bar="false"></Plotly>
-        </v-col>
+        </div>
       </v-row>
     </v-container> 
 </template>
@@ -24,7 +47,7 @@ export default {
     }],
     layout:{
       // title: "My graph"
-    },
+    }
   }),
   mounted () {
     const solvedFunctionInfo = this.$store.getters.solvedFunctionInformations;
@@ -53,15 +76,9 @@ export default {
         y: null,
         type: "scatter"
       }, {
-        z: [
-          [10, 10.625, 12.5, 15.625, 20],
-          [5.625, 6.25, 8.125, 11.25, 15.625],
-          [2.5, 3.125, 5, 8.125, 12.5],
-          [0.625, 1.25, 3.125, 6.25, 10.625],
-          [0, 0.625, 2.5, 5.625, 10]
-        ],
-        x: [-9, -6, -5, -3, -1],
-        y: [0, 1, 4, 5, 7],
+        z: null,
+        x: null,
+        y: null,
         type: "contour"
       }];
       if(traceVariables.length == 2){
@@ -75,6 +92,19 @@ export default {
         data[1].y = linspace( parseFloat(variablesBandwidth[1][0]), parseFloat(variablesBandwidth[1][1]), data[1].z[0].length);
         }
       return data;
+    },
+    functionValue: function () {
+      return this.$store.getters.solvedFunctionInformations.functionValue;
+    },
+    iterations: function () {
+      return this.$store.getters.solvedFunctionInformations.iterations;
+    },
+    variablesNames: function () {
+      const optimalPiont = this.$store.getters.solvedFunctionInformations.optimalVariables;
+      return Object.keys(optimalPiont);
+    },
+    optimalPiont: function () {
+      return this.$store.getters.solvedFunctionInformations.optimalVariables;
     }
   }
 }

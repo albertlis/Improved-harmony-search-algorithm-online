@@ -64,7 +64,10 @@ def getZMatrix(ihs):
         for j in range(len(y)):
             val = function(x[i], y[j])
             Z[i][j] = val
-    return Z.tolist()
+    Z1 = []
+    for sublist in reversed(Z.tolist()):
+        Z1.append(list(reversed(sublist)))
+    return Z1
 
 
 def convertTrace(tempTrace):
