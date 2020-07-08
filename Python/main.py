@@ -7,6 +7,7 @@ from flask_cors import CORS, cross_origin
 
 from I_IHS import I_IHSAlgorithm
 from VariablesParser import evaluateError, VariablesParser
+import numpy as np
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -43,12 +44,27 @@ def calculateFunction():
         functionValue, optimalVariables = ihs.getOptimalSolution()
         lastBestSolutionIteration = ihs.getLastBestSolutionIteration()
         trace = convertTrace(ihs.getTrace())
+
+        Z = getZMatrix(ihs)
         return json.dumps({'functionValue': functionValue, 'optimalVariables': optimalVariables,
-                           'iterations': lastBestSolutionIteration, 'trace': trace}), \
+                           'iterations': lastBestSolutionIteration, 'trace': trace, 'Z': Z}), \
                status.HTTP_201_CREATED
     except ZeroDivisionError as e:
         print(e)
         return status.HTTP_400_BAD_REQUEST
+
+
+def getZMatrix(ihs):
+    lowBounds, upBounds = ihs.getBounds()
+    x = np.linspace(lowBounds[0], upBounds[0], 50)
+    y = np.linspace(lowBounds[1], upBounds[1], 50)
+    Z = np.empty(shape=(len(x), len(y)))
+    function = ihs.getFunction()
+    for i in range(len(x)):
+        for j in range(len(y)):
+            val = function(x[i], y[j])
+            Z[i][j] = val
+    return Z.tolist()
 
 
 def convertTrace(tempTrace):

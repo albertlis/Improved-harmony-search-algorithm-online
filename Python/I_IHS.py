@@ -138,6 +138,8 @@ class I_IHSAlgorithm(IHSAlgorithm):
 
     def getBounds(self):
         return self._varLowerBounds, self._varUpperBounds
+    def getFunction(self):
+        return self._objective_function
 
 
 
