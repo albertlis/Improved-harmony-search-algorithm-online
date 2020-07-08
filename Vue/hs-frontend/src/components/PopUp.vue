@@ -190,7 +190,7 @@ export default {
         // await this.sleep(3000);
         this.calculateButtonLoading = false;
         this.dialog = false;
-        window.location.href="/result";
+        this.$router.push("/result")
       }
     },
     // sleep(ms) {

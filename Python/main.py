@@ -16,9 +16,6 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 @app.route('/checkfunction', methods=['GET'])
 @cross_origin()
 def checkFunction():
-    # Example query:
-    # ?function=(x+e*10)/y&iterations=1000&hms=10&hcmrmin=0.5&hcmrmax=0.75&parmin=0.2&parmax=0.8&bwmin=1&bwmax=2
-    # parameters = extractAlgorithmParameters()
     function = request.args.get('function', type=str).replace(' ', '+')
     message, error = evaluateError(function)
     if error:
@@ -45,13 +42,23 @@ def calculateFunction():
         ihs.doYourTask()
         functionValue, optimalVariables = ihs.getOptimalSolution()
         lastBestSolutionIteration = ihs.getLastBestSolutionIteration()
-        trace = ihs.getTrace()
+        trace = convertTrace(ihs.getTrace())
         return json.dumps({'functionValue': functionValue, 'optimalVariables': optimalVariables,
                            'iterations': lastBestSolutionIteration, 'trace': trace}), \
                status.HTTP_201_CREATED
     except ZeroDivisionError as e:
         print(e)
         return status.HTTP_400_BAD_REQUEST
+
+
+def convertTrace(tempTrace):
+    trace = dict()
+    for key in tempTrace[0].keys():
+        tr = list()
+        for point in tempTrace:
+            tr.append(point[key])
+        trace[key] = tr
+    return trace
 
 
 def getVariablesBandwidth(variables):

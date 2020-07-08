@@ -23,7 +23,16 @@ export default {
     }],
     layout:{
       title: "My graph"
+    },
+  }),
+  mounted () {
+    console.log(this.$store.getters.solvedFunctionInformations)
+  },
+  methods: {
+    click() {
+      // const solvedFunctionInfo = this.$store.getters.solvedFunctionInformations;
+      console.log(this.$store.getters.solvedFunctionInformations)
     }
-  })
+  }
 }
 </script>
