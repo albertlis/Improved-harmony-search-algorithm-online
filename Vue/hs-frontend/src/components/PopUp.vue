@@ -119,11 +119,19 @@
                     type="number"> 
                   </v-text-field>
                 </v-row>
+                <v-row v-if="errors.length">
+                  <p class="error--text">
+                    <b>Please correct the following error(s):</b>
+                    <ul>
+                      <li v-for="error in errors" :key="error">{{ error }}</li>
+                    </ul>
+                  </p>
+                </v-row>
               </v-form>
             </v-card-text>
           </v-card>
           <v-row>
-            <v-btn color="primary" class="ma-2 ml-5" :loading="calculateButtonLoading" @click="step = 3; calculate()">Calculate</v-btn>
+            <v-btn color="primary" class="ma-2 ml-5" :loading="calculateButtonLoading" @click="calculate()">Calculate</v-btn>
             <v-btn text class="my-2" @click="step = 1">Previous</v-btn>
             <v-spacer></v-spacer>
             <v-btn text class="ma-2 mr-5" @click="dialog = false">Cancel</v-btn>
@@ -154,6 +162,7 @@ export default {
       message: '', 
       variables: null,
       variablesBandwidth: null,
+      errors: ''
     }
   },
   methods: {
@@ -179,8 +188,9 @@ export default {
       }
     },
     calculate: async function () {
-      this.$v.$touch()
-      if (!this.$v.$invalid) {
+      this.errors = this.checkForm();
+      if (!this.errors.length) {
+        this.step = 3; 
         this.calculateButtonLoading = true;
         const query = this.prepareCalculateFunctionQuery();
         const response = await this.sendGetRequest(query);
@@ -227,6 +237,19 @@ export default {
       }).catch((error) => {
         console.error('Error:', error);
       });
+    },
+    checkForm() {
+      let errors = [];
+      for (let i = 0; i < this.variablesBandwidth.length; ++i) {
+        const row = this.variablesBandwidth[i];
+        if (row[0] > row[1]) {
+          errors.push('Min should be less than max value')
+        }
+        if (!row[0] || !row[1]) {
+          errors.push('All fields are required')
+        }
+      }
+      return [...new Set(errors)];
     }
   },
   validations: {
