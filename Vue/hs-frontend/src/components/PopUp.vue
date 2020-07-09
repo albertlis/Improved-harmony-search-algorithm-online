@@ -89,6 +89,11 @@
                     @blur="$v.bwMaxValue.$touch()">
                   </v-text-field>
                 </v-row>
+                <v-row fluid>
+                  <v-alert :value="alert" type="error">
+                    {{ alertMessage }}
+                  </v-alert>
+                </v-row>
               </v-form>
             </v-card-text>
           </v-card>
@@ -162,7 +167,9 @@ export default {
       message: '', 
       variables: null,
       variablesBandwidth: null,
-      errors: ''
+      errors: '',
+      alert: false,
+      alertMessage: null
     }
   },
   methods: {
@@ -180,6 +187,11 @@ export default {
         this.nextButtonLoading = true;
         const query = this.prepareCheckFunctionQuery();
         const {message, variables} = await this.sendGetRequest(query);
+        if (!message && !variables) {
+          this.nextButtonLoading = false;
+          return;
+        }
+        this.alert = false;
         this.message = message;
         this.variables = variables;
         // await this.sleep(3000);
@@ -230,12 +242,17 @@ export default {
         if(response.ok) {
           return response.json();
         }
+        if(response.status == 400) {
+          throw new Error('Function is invalid')
+        }
         throw new Error('Request failed');
       }).then(jsonResponse => {
         const jsonString = JSON.stringify(jsonResponse);
         return JSON.parse(jsonString);
       }).catch((error) => {
-        console.error('Error:', error);
+        this.alert = true;
+        this.alertMessage = error;
+        return {message: null, variables: null};
       });
     },
     checkForm() {
