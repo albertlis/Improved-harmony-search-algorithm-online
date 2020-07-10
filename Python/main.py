@@ -63,6 +63,10 @@ def getZMatrix(ihs):
     for i in range(len(x)):
         for j in range(len(y)):
             val = function(x[i], y[j])
+            if val == np.Inf:
+                val = 1e+300
+            elif val == -np.Inf:
+                val = -1e+300
             Z[i][j] = val
     Z1 = []
     for sublist in reversed(Z.tolist()):

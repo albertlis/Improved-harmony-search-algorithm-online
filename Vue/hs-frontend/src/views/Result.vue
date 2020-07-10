@@ -24,11 +24,18 @@
           </v-card-text>
         </v-card>
       </v-row>
-      <v-row class="my-1" justify="center">
-        <div>
-          <Plotly :data="calculatedData" :layout="layout" :display-mode-bar="false"></Plotly>
+      <!-- <v-row class="my-1" justify="center"> -->
+        <div class="my-1">
+          <Plotly 
+            :data="calculatedData" 
+            :layout="layout" 
+            :display-mode-bar="true" 
+            :scrollZoom="true"
+            :responsive="true"
+            >
+          </Plotly>
         </div>
-      </v-row>
+      <!-- </v-row> -->
     </v-container> 
 </template>
 
@@ -46,10 +53,17 @@ export default {
       type:"scatter"
     }],
     layout:{
-      // title: "My graph"
+      showlegend: false,
+      margin: {
+        l: 20,
+        r: 20,
+        b: 30,
+        t: 30,
+        pad: 4
+      }
     }
   }),
-  mounted () {
+    mounted () {
     const solvedFunctionInfo = this.$store.getters.solvedFunctionInformations;
     const traceVariables = Object.keys(solvedFunctionInfo.trace);
     if(traceVariables.length == 2)
@@ -79,7 +93,15 @@ export default {
         z: null,
         x: null,
         y: null,
-        type: "contour"
+        type: "contour",
+        contours: {
+          showlabels: true,
+          labelfont: {
+            family: 'Raleway',
+            size: 12,
+            color: 'white',
+          }
+        }
       }];
       if(traceVariables.length == 2){
         data[0].x = solvedFunctionInfo.trace[traceVariables[0]];

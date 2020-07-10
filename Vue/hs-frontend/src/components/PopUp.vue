@@ -178,9 +178,6 @@ export default {
       this.HCMRRange = [0.5, 0.75];
       this.PARRange = [0.5, 0.75];
     },
-    getBwMaxValue: function () {
-      return this.bwMaxValue;
-    },
     goNext: async function () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
