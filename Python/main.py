@@ -68,10 +68,11 @@ def getZMatrix(ihs):
             elif val == -np.Inf:
                 val = -1e+300
             Z[i][j] = val
-    Z1 = []
-    for sublist in reversed(Z.tolist()):
-        Z1.append(list(reversed(sublist)))
-    return Z1
+    # Z1 = []
+    # for sublist in reversed(Z.tolist()):
+    #     Z1.append(list(reversed(sublist)))
+    # return Z1
+    return Z.tolist()
 
 
 def convertTrace(tempTrace):

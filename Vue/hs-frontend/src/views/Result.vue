@@ -24,18 +24,16 @@
           </v-card-text>
         </v-card>
       </v-row>
-      <!-- <v-row class="my-1" justify="center"> -->
-        <div class="my-1">
-          <Plotly 
-            :data="calculatedData" 
-            :layout="layout" 
-            :display-mode-bar="true" 
-            :scrollZoom="true"
-            :responsive="true"
-            >
-          </Plotly>
-        </div>
-      <!-- </v-row> -->
+      <div class="my-1">
+        <Plotly 
+          :data="calculatedData" 
+          :layout="layout" 
+          :display-mode-bar="true" 
+          :scrollZoom="true"
+          :responsive="true"
+          >
+        </Plotly>
+      </div>
     </v-container> 
 </template>
 
@@ -47,40 +45,8 @@ export default {
     Plotly
   },
   data:() => ({
-    data:[{
-      x: [1,2,3,4],
-      y: [10,15,13,17],
-      type:"scatter"
-    }],
-    layout:{
-      showlegend: false,
-      margin: {
-        l: 20,
-        r: 20,
-        b: 30,
-        t: 30,
-        pad: 4
-      }
-    }
+  
   }),
-    mounted () {
-    const solvedFunctionInfo = this.$store.getters.solvedFunctionInformations;
-    const traceVariables = Object.keys(solvedFunctionInfo.trace);
-    if(traceVariables.length == 2)
-      this.data[0].x = solvedFunctionInfo.trace[traceVariables[0]];
-      this.data[0].y = solvedFunctionInfo.trace[traceVariables[1]];
-      // console.log(this.data.x)
-  },
-  methods: {
-    onClick() {
-      const solvedFunctionInfo = this.$store.getters.solvedFunctionInformations;
-      const traceVariables = Object.keys(solvedFunctionInfo.trace);
-      if(traceVariables.length == 2)
-        this.data.x = solvedFunctionInfo.trace[traceVariables[0]];
-        this.data.y = solvedFunctionInfo.trace[traceVariables[1]];
-        console.log(this.data.x)
-    }
-  },
   computed: {
     calculatedData: function () {
       const solvedFunctionInfo = this.$store.getters.solvedFunctionInformations;
@@ -127,6 +93,23 @@ export default {
     },
     optimalPiont: function () {
       return this.$store.getters.solvedFunctionInformations.optimalVariables;
+    },
+    layout: function () {
+      const solvedFunctionInfo = this.$store.getters.solvedFunctionInformations;
+      const traceVariables = Object.keys(solvedFunctionInfo.trace);
+      let layout = {
+        showlegend: false,
+        margin: {
+          l: 50,
+          r: 30,
+          b: 50,
+          t: 30,
+          pad: 4
+        },
+        xaxis: {title: {text: traceVariables[0]}},
+        yaxis: {title: {text: traceVariables[1]}}
+      }
+      return layout;
     }
   }
 }
