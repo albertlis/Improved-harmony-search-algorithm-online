@@ -7,15 +7,14 @@
     >
       <v-spacer></v-spacer>
       <div class="d-flex align-center">
-        <v-btn text to="/">
-          <v-img to="/"
+        <v-btn text href="/">
+          <v-img
             alt="HS Logo"
             class="shrink mr-2"
             contain
             src="../assets/logoHS.png"
             transition="scale-transition"
-            width="50"
-            
+            width="50" 
           />
           <v-toolbar-title>Harmony search alghoritm</v-toolbar-title>
         </v-btn>
