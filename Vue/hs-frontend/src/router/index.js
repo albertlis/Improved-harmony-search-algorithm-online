@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuelidate from 'vuelidate'
 const Home = () => import('../views/Home.vue')
-const Result = () => import('../views/Result.vue')
+import Result from '../views/Result.vue'
 
 Vue.use(VueRouter)
 Vue.use(Vuelidate)

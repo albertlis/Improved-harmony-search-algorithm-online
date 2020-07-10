@@ -22,7 +22,7 @@
         </v-stepper-step>
 
         <v-stepper-content step="1">
-          <v-card>
+          <v-card @keyup.enter="goNext()">
             <v-card-text>
               <v-form class="px-3" ref="form">
                 <v-text-field label="Function" 
@@ -108,7 +108,7 @@
         <v-stepper-step :complete="step > 2" step="2">Set variables range</v-stepper-step>
 
         <v-stepper-content step="2">
-          <v-card>
+          <v-card @keyup.enter="calculate()">
             <v-card-text>
               <v-form class="px-3" ref="varieblesForm">
                 <v-row v-for="(variable,i) in variables" :key="i">
@@ -152,14 +152,14 @@ import { required, minValue, integer } from 'vuelidate/lib/validators'
 export default {
   data() {
     return {
-      func: '(x + e * 10) / y',
+      func: '4*pow(x1, 2) - 2.1*pow(x1, 4) + 1/3*pow(x1, 6) + x1*x2 -4*pow(x2, 2) + 4*pow(x2, 4)',
       dialog: false,
       valid: true,
-      numberOfIterations: 1000,
+      numberOfIterations: 50000,
       HMS: 10,
       HCMRRange: [0.5, 0.75],
       PARRange: [0.2, 0.8],
-      bwMinValue: 1.0,
+      bwMinValue: 0.1,
       bwMaxValue: 2.0,
       nextButtonLoading: false,
       calculateButtonLoading: false,
