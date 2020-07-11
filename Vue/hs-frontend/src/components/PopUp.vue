@@ -25,13 +25,42 @@
           <v-card @keyup.enter="goNext()">
             <v-card-text>
               <v-form class="px-3" ref="form">
-                <v-text-field label="Function" 
-                  v-model="func" 
-                  prepend-icon="functions" 
-                  :error-messages="funcErrors"
-                  @change="$v.func.$touch()"
-                  @blur="$v.func.$touch()"> 
-                </v-text-field>
+                <v-row>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">   
+                      <v-text-field label="Function" 
+                        v-model="func" 
+                        v-on="on"
+                        prepend-icon="functions" 
+                        :error-messages="funcErrors"
+                        @change="$v.func.$touch()"
+                        @blur="$v.func.$touch()"> 
+                      </v-text-field>
+                    </template>
+                    <span>Use Python notation. Mostly used: <br/>
+                      - pow(x,y) -> x<sup>y</sup><br/>
+                      - exp(x) -> e<sup>x</sup><br/>
+                      - log(x[, y]) -> one argument = ln(x), two arguments = log<sub>y</sub>(x)<br/>
+                      - sqrt(x) -> sqare root of x<br/>
+                      - cos(x)<br/>
+                      - sin(x)<br/>
+                      For more see Python math documentation.
+                    </span>
+                  </v-tooltip>
+                   <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">  
+                      <v-btn 
+                        v-on="on" 
+                        icon 
+                        color="primary"
+                        href="https://docs.python.org/3/library/math.html"
+                        target="_blank">
+                          <v-icon>help</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Go to Python math docs</span>
+                  </v-tooltip>
+                </v-row>
                 <v-text-field 
                   v-model="numberOfIterations"
                   type="number"
