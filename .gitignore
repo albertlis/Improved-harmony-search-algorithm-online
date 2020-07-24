@@ -26,3 +26,5 @@ pnpm-debug.log*
 *.svg
 Python/__pycache__/VariablesParser.cpython-38.pyc
 __pycache__/
+*.pem
+vue.tar.gz

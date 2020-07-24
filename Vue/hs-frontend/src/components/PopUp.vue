@@ -245,13 +245,14 @@ export default {
       // return new Promise(resolve => setTimeout(resolve, ms));
     // },
     prepareCheckFunctionQuery() {
-      const url = 'http://127.0.0.1:5000/checkfunction';
+      const url = 'http://100.25.29.178/checkfunction';
       const func = this.func.replace(/\s+/g, '');
       const query = `${url}?function=${func}`;
+      console.log(query);
       return query;
     },
     prepareCalculateFunctionQuery() {
-      const url = 'http://127.0.0.1:5000/calculate?';
+      const url = 'http://100.25.29.178/calculate?';
       const func = this.func.replace(/\s+/g, '');
       let query = url + `function=${func}&iterations=${this.numberOfIterations}&hms=${this.HMS}`+
                         `&hcmrmin=${this.HCMRRange[0]}&hcmrmax=${this.HCMRRange[1]}`+
