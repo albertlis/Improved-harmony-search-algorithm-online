@@ -1,7 +1,7 @@
 # !/usr/bin/python3
 import json
 
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request
 from flask_api import status
 from flask_cors import CORS, cross_origin
 
@@ -30,6 +30,7 @@ def checkFunction():
 @cross_origin()
 def calculateFunction():
     algorithmParameters = extractAlgorithmParameters()
+    print(algorithmParameters['iterations'])
     message, error = evaluateError(algorithmParameters['function'])
     if error:
         return jsonify(message=message), status.HTTP_400_BAD_REQUEST
@@ -72,7 +73,7 @@ def getZMatrix(ihs):
     # for sublist in reversed(Z.tolist()):
     #     Z1.append(list(reversed(sublist)))
     # return Z1
-    return Z.tolist()
+    return np.transpose(Z).tolist()
 
 
 def convertTrace(tempTrace):
@@ -111,4 +112,4 @@ def extractAlgorithmParameters():
     return params
 
 
-app.run(debug=True, use_reloader=False)
+app.run(use_reloader=False)

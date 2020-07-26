@@ -144,6 +144,9 @@
           <v-card @keyup.enter="calculate()">
             <v-card-text>
               <v-form ref="varieblesForm">
+                <v-row>
+                  <p> {{ this.message }} </p>
+                </v-row>
                 <v-row v-for="(variable,i) in variables" :key="i">
                   <v-text-field 
                     :label="variable + ' min'"
@@ -181,7 +184,7 @@
 </template>
 
 <script>
-import { required, minValue, integer } from 'vuelidate/lib/validators'
+import { required, minValue, maxValue, integer } from 'vuelidate/lib/validators'
 export default {
   data() {
     return {
@@ -218,7 +221,6 @@ export default {
         const query = this.prepareCheckFunctionQuery();
         const {message, variables} = await this.sendGetRequest(query);
         if (variables === undefined) {
-          console.log(message, variables);
           this.alert = true;
           this.alertMessage = message;
           this.nextButtonLoading = false;
@@ -252,22 +254,24 @@ export default {
       // return new Promise(resolve => setTimeout(resolve, ms));
     // },
     prepareCheckFunctionQuery() {
-      const url = 'http://100.25.29.178/checkfunction';
+      // const url = 'http://100.25.29.178/checkfunction';
+      const url = 'http://127.0.0.1:5000/checkfunction';
       const func = this.func.replace(/\s+/g, '');
       const query = `${url}?function=${func}`;
       // console.log(query);
       return query;
     },
     prepareCalculateFunctionQuery() {
-      const url = 'http://100.25.29.178/calculate?';
+      // const url = 'http://100.25.29.178/calculate?';
+      const url = 'http://127.0.0.1:5000/calculate?';
       const func = this.func.replace(/\s+/g, '');
       let query = url + `function=${func}&iterations=${this.numberOfIterations}&hms=${this.HMS}`+
                         `&hcmrmin=${this.HCMRRange[0]}&hcmrmax=${this.HCMRRange[1]}`+
                         `&parmin=${this.PARRange[0]}&parmax=${this.PARRange[1]}`+
                         `&bwmin=${this.bwMinValue}&bwmax=${this.bwMaxValue}`;
       for(let i = 0; i < this.variablesBandwidth.length; ++i) {
-        query += `&${this.variables[i]}min=${this.variablesBandwidth[i][0]}`;
-        query += `&${this.variables[i]}max=${this.variablesBandwidth[i][1]}`;
+        query += `&${this.variables[i]}min=${parseFloat(this.variablesBandwidth[i][0])}`;
+        query += `&${this.variables[i]}max=${parseFloat(this.variablesBandwidth[i][1])}`;
       }
       return query;
     },
@@ -285,11 +289,11 @@ export default {
       let errors = [];
       for (let i = 0; i < this.variablesBandwidth.length; ++i) {
         const row = this.variablesBandwidth[i];
-        if (row[0] >= row[1]) {
-          errors.push('Min should be less than max value')
+        if (parseFloat(row[0]) >= parseFloat(row[1])) {
+          errors.push('Min should be less than max value');
         }
         if (!row[0] || !row[1]) {
-          errors.push('All fields are required')
+          errors.push('All fields are required');
         }
       }
       return [...new Set(errors)];
@@ -304,11 +308,13 @@ export default {
       required,
       integer,
       minValue: minValue(1),
+      maxValue: maxValue(10000000),
     },
     HMS: {
       required,
       integer,
       minValue: minValue(1),
+      maxValue: maxValue(10000000),
     },
     bwMinValue: {
       required,
@@ -332,6 +338,7 @@ export default {
       !this.$v.numberOfIterations.required && errors.push('Iterations are required.')
       !this.$v.numberOfIterations.integer && errors.push('Iterations have to be integer value')
       !this.$v.numberOfIterations.minValue && errors.push('Iterations have to be more than 0')
+      !this.$v.numberOfIterations.maxValue && errors.push('Iterations is limited to 10000000')
       return errors
     },
     HMSErrors () {
@@ -340,6 +347,7 @@ export default {
       !this.$v.HMS.required && errors.push('HMS is required.')
       !this.$v.HMS.integer && errors.push('HMS have to be integer value')
       !this.$v.HMS.minValue && errors.push('HMS have to be more than 0')
+      !this.$v.HMS.maxValue && errors.push('Iterations is limited to 10000000')
       return errors
     },
     bwMinErrors () {

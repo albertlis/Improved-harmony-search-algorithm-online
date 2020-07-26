@@ -37,7 +37,7 @@ class VariablesParser:
         self.__parse()
         
         if self.__hasNext() and self.__index == 0:
-            raise VP_WrongExpression("Nioczekiwany znak: '" + self.__currentChar(1) + "'")
+            raise VP_WrongExpression("Unexpected character: '" + self.__currentChar(1) + "'")
         elif self.__hasNext():
             ind = self.__index
             while True:
@@ -50,7 +50,7 @@ class VariablesParser:
                 except VP_WrongExpression:
                     pass
                 else:
-                    err = "Nieoczekiwany znak: '" + self.__string[self.__index: ind] + "'"
+                    err = "Unexpected character: '" + self.__string[self.__index: ind] + "'"
                     raise VP_WrongExpression(err)
             
             
@@ -90,7 +90,7 @@ class VariablesParser:
         self.__parseFunctions()
         char = self.__currentChar(1)
         if char == '^':
-            raise Exception("Zamiast x^y użyj pow(x, y)")
+            raise Exception("Instead x^y use pow(x, y)")
             self.__index += 1
             self.__parsePowering()
         else:
@@ -120,7 +120,7 @@ class VariablesParser:
         
         if char != 0:
             if not self.__parseBrackets(numOfArgs, char):
-                raise Exception("Parametry funkcji " + char + " w nawiasy")
+                raise Exception("Function parameters " + char + " should be in brackets")
         else:
             self.__parseBrackets(1, None)
         
@@ -132,10 +132,10 @@ class VariablesParser:
                 self.__parseAddition()
                 if i < numOfArgs - 1:
                     if self.__currentChar(1) != ',':
-                        raise Exception("Za mało argumenów w funkcji '" + functionName + "'")
+                        raise Exception("To few function arguments in '" + functionName + "'")
                     self.__index += 1
             if self.__currentChar(1) != ')':
-                raise Exception("Nie znaleziono zamykającego nawiasu")
+                raise Exception("Didn't found closing bracket")
             self.__index += 1
             return True
         else:
@@ -169,7 +169,7 @@ class VariablesParser:
                 value += char
             elif char == '.':
                 if decimal_found:
-                    raise Exception("Za dużo kropek")
+                    raise Exception("To many dots")
                 decimal_found = True
                 value += '.'
             else:
@@ -178,7 +178,7 @@ class VariablesParser:
         
         if len(value) == 0:
             if char == '':
-                raise Exception("Nieoczekiwane zakończenie wzoru")
+                raise Exception("Unexpected equation ending")
             else:
                 #to jest raczej wykluczone przez __parseValue() ...
                 raise Exception("There should be a number")
@@ -206,7 +206,7 @@ class VariablesParser:
     
 #ta funkcja do dopasowania do programu
 def evaluateError(expression, constants={}):
-    outputStr, code = "Nie podano funkcji", 1
+    outputStr, code = "Function was not given", 1
     if expression != '':
         outputStr, code = "Robie", 2
         try:
@@ -218,8 +218,8 @@ def evaluateError(expression, constants={}):
                 outStr += var
                 if var != variables[len(variables) - 1]:
                     outStr += ', '
-            if outStr != '': outputStr, code =  'Wykryte zmienne: ' + outStr, 0
-            else: outputStr, code = 'Brak zmiennych', 1
+            if outStr != '': outputStr, code =  'Found variables: ' + outStr, 0
+            else: outputStr, code = 'There are no variables', 1
         except Exception as ex:
             outputStr, code = ex.args[0] , 2
     return outputStr, code

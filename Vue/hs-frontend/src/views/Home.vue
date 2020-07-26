@@ -27,14 +27,6 @@
               </ul>
               </div>
           </v-card>
-          <v-card class="ma-1">
-              <div class="ma-1">
-              <b>TODO:</b>
-              <ul>
-                <li>Show error message from server when got bad request</li>
-              </ul>
-              </div>
-          </v-card>
         </v-card>
       </v-row>
     </v-container> 
