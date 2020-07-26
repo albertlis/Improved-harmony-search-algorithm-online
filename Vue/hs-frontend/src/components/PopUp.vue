@@ -217,7 +217,10 @@ export default {
         this.nextButtonLoading = true;
         const query = this.prepareCheckFunctionQuery();
         const {message, variables} = await this.sendGetRequest(query);
-        if (!message && !variables) {
+        if (variables === undefined) {
+          console.log(message, variables);
+          this.alert = true;
+          this.alertMessage = message;
           this.nextButtonLoading = false;
           return;
         }
@@ -270,17 +273,12 @@ export default {
     },
     sendGetRequest (query) {
       return fetch(query, {mode: 'cors'}).then(response => {
-        if(response.ok) {
+        if(response.ok || response.status == 400) {
           return response.json();
-        }
-        if(response.status == 400) {
-          throw new Error(response.json())
         }
         throw new Error('Request failed');
       }).catch((error) => {
-        this.alert = true;
-        this.alertMessage = error;
-        return {message: null, variables: null};
+        return {message: error, variables: undefined};
       });
     },
     checkForm() {
