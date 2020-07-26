@@ -81,7 +81,7 @@
                   @blur="$v.HMS.$touch()">
                 </v-text-field>
                 </v-row>
-                <v-row class="my-4">
+                <v-row class="mt-7">
                   <v-range-slider
                     v-model="HCMRRange"
                     thumb-label="always"
@@ -92,7 +92,7 @@
                     label="HCMR">
                   </v-range-slider>
                 </v-row>
-                <v-row class="my-2">
+                <v-row>
                   <v-range-slider
                     v-model="PARRange"
                     thumb-label="always"
@@ -239,7 +239,7 @@ export default {
         this.$store.commit('setFunctionInformations', response);
         this.$store.commit('setVariablesBandwidth', this.variablesBandwidth);
         // await this.sleep(3000);
-        await this.$router.push("/result")
+        this.$router.push("/result")
         this.calculateButtonLoading = false;
         this.dialog = false;
         this.step = 3;
@@ -274,12 +274,9 @@ export default {
           return response.json();
         }
         if(response.status == 400) {
-          throw new Error('Function is invalid')
+          throw new Error(response.json())
         }
         throw new Error('Request failed');
-      }).then(jsonResponse => {
-        const jsonString = JSON.stringify(jsonResponse);
-        return JSON.parse(jsonString);
       }).catch((error) => {
         this.alert = true;
         this.alertMessage = error;
