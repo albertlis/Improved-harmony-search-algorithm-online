@@ -1,6 +1,6 @@
 <template>
     <v-container fill-height>
-      <v-row align="center">
+      <v-row justify="center">
         <v-col align="center">
           <v-img
           alt="Harmony search Logo"
@@ -9,12 +9,33 @@
           transition="scale-transition"
           width="150"
           />
-          <h1>Improved harmony search alghoritm</h1>
+          <h1>Improved harmony search algorithm</h1>
           <p>
             is a metaheurestic alghoritm for solving problems. In this webpage it can solve linear and non linear equations.
           </p>
           <PopUp/>
         </v-col>
+      </v-row>
+      <v-row justify="center">
+        <v-card flat>
+          <v-card class="ma-1" >
+              <div class="ma-1">
+              <b>Known issues:</b>
+              <ul>
+                <li>Countour plot sometimes may be rotated</li>
+                <li>Plot labels are not accurate</li>
+              </ul>
+              </div>
+          </v-card>
+          <v-card class="ma-1">
+              <div class="ma-1">
+              <b>TODO:</b>
+              <ul>
+                <li>Show error message from server when got bad request</li>
+              </ul>
+              </div>
+          </v-card>
+        </v-card>
       </v-row>
     </v-container> 
 </template>

@@ -24,7 +24,7 @@
         <v-stepper-content step="1">
           <v-card @keyup.enter="goNext()">
             <v-card-text>
-              <v-form class="px-3" ref="form">
+              <v-form ref="form">
                 <v-row>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on }">   
@@ -61,6 +61,7 @@
                     <span>Go to Python math docs</span>
                   </v-tooltip>
                 </v-row>
+                <v-row>
                 <v-text-field 
                   v-model="numberOfIterations"
                   type="number"
@@ -69,6 +70,8 @@
                   @change="$v.numberOfIterations.$touch()"
                   @blur="$v.numberOfIterations.$touch()">
                 </v-text-field>
+                </v-row>
+                <v-row>
                 <v-text-field 
                   v-model="HMS"
                   type="number"
@@ -77,6 +80,7 @@
                   @change="$v.HMS.$touch()"
                   @blur="$v.HMS.$touch()">
                 </v-text-field>
+                </v-row>
                 <v-row class="my-4">
                   <v-range-slider
                     v-model="HCMRRange"
@@ -127,10 +131,10 @@
             </v-card-text>
           </v-card>
           <v-row>
-            <v-btn color="primary" class="ma-2 ml-5" :loading="nextButtonLoading" @click="goNext()">Continue</v-btn>
-            <v-btn text class="my-2" @click="clearForm">Clear</v-btn>
+            <v-btn color="primary" class="ma-3" :loading="nextButtonLoading" @click="goNext()">Continue</v-btn>
+            <v-btn text class="ma-3" @click="clearForm">Clear</v-btn>
             <v-spacer></v-spacer>
-            <v-btn text class="ma-2 mr-5" @click="dialog = false">Cancel</v-btn>
+            <v-btn text class="ma-3" @click="dialog = false">Cancel</v-btn>
           </v-row>
         </v-stepper-content>
 
@@ -139,7 +143,7 @@
         <v-stepper-content step="2">
           <v-card @keyup.enter="calculate()">
             <v-card-text>
-              <v-form class="px-3" ref="varieblesForm">
+              <v-form ref="varieblesForm">
                 <v-row v-for="(variable,i) in variables" :key="i">
                   <v-text-field 
                     :label="variable + ' min'"
@@ -165,10 +169,10 @@
             </v-card-text>
           </v-card>
           <v-row>
-            <v-btn color="primary" class="ma-2 ml-5" :loading="calculateButtonLoading" @click="calculate()">Calculate</v-btn>
-            <v-btn text class="my-2" @click="step = 1">Previous</v-btn>
+            <v-btn color="primary" class="ma-3" :loading="calculateButtonLoading" @click="calculate()">Calculate</v-btn>
+            <v-btn text class="ma-3" @click="step = 1">Previous</v-btn>
             <v-spacer></v-spacer>
-            <v-btn text class="ma-2 mr-5" @click="dialog = false">Cancel</v-btn>
+            <v-btn text class="ma-3" @click="dialog = false">Cancel</v-btn>
           </v-row>
         </v-stepper-content>
       </v-stepper>
@@ -209,7 +213,7 @@ export default {
     },
     goNext: async function () {
       this.$v.$touch()
-      if (!this.$v.$invalid) {
+      if (!this.$v.$invalid && this.isBandwidthOk()) {
         this.nextButtonLoading = true;
         const query = this.prepareCheckFunctionQuery();
         const {message, variables} = await this.sendGetRequest(query);
@@ -227,8 +231,7 @@ export default {
     },
     calculate: async function () {
       this.errors = this.checkForm();
-      if (!this.errors.length) {
-        this.step = 3; 
+      if (!this.errors.length) { 
         this.calculateButtonLoading = true;
         const query = this.prepareCalculateFunctionQuery();
         const response = await this.sendGetRequest(query);
@@ -236,9 +239,10 @@ export default {
         this.$store.commit('setFunctionInformations', response);
         this.$store.commit('setVariablesBandwidth', this.variablesBandwidth);
         // await this.sleep(3000);
+        await this.$router.push("/result")
         this.calculateButtonLoading = false;
         this.dialog = false;
-        this.$router.push("/result")
+        this.step = 3;
       }
     },
     // sleep(ms) {
@@ -248,7 +252,7 @@ export default {
       const url = 'http://100.25.29.178/checkfunction';
       const func = this.func.replace(/\s+/g, '');
       const query = `${url}?function=${func}`;
-      console.log(query);
+      // console.log(query);
       return query;
     },
     prepareCalculateFunctionQuery() {
@@ -286,7 +290,7 @@ export default {
       let errors = [];
       for (let i = 0; i < this.variablesBandwidth.length; ++i) {
         const row = this.variablesBandwidth[i];
-        if (row[0] > row[1]) {
+        if (row[0] >= row[1]) {
           errors.push('Min should be less than max value')
         }
         if (!row[0] || !row[1]) {
@@ -294,19 +298,22 @@ export default {
         }
       }
       return [...new Set(errors)];
+    },
+    isBandwidthOk() {
+      return !(this.bwMaxErrors.length || this.bwMaxErrors.length)
     }
   },
   validations: {
     func: {required},
     numberOfIterations : {
       required,
-      minValue: minValue(1),
       integer,
+      minValue: minValue(1),
     },
     HMS: {
       required,
-      minValue: minValue(1),
       integer,
+      minValue: minValue(1),
     },
     bwMinValue: {
       required,
@@ -321,41 +328,44 @@ export default {
     funcErrors () {
       const errors = []
       if (!this.$v.func.$dirty) return errors
-        !this.$v.func.required && errors.push('Function is required.')
-        return errors
+      !this.$v.func.required && errors.push('Function is required.')
+      return errors
     },
     iterationsErrors () {
       const errors = []
       if (!this.$v.numberOfIterations.$dirty) return errors
-        !this.$v.numberOfIterations.required && errors.push('Iterations is required.')
-        !this.$v.numberOfIterations.minValue && errors.push('Iterations have to be more than 0')
-        !this.$v.numberOfIterations.integer && errors.push('Iterations have to be integer value')
-        return errors
+      !this.$v.numberOfIterations.required && errors.push('Iterations are required.')
+      !this.$v.numberOfIterations.integer && errors.push('Iterations have to be integer value')
+      !this.$v.numberOfIterations.minValue && errors.push('Iterations have to be more than 0')
+      return errors
     },
     HMSErrors () {
       const errors = []
       if (!this.$v.HMS.$dirty) return errors
-        !this.$v.HMS.required && errors.push('HMS is required.')
-        !this.$v.HMS.minValue && errors.push('HMS have to be more than 0')
-        !this.$v.HMS.integer && errors.push('HMS have to be integer value')
-        return errors
+      !this.$v.HMS.required && errors.push('HMS is required.')
+      !this.$v.HMS.integer && errors.push('HMS have to be integer value')
+      !this.$v.HMS.minValue && errors.push('HMS have to be more than 0')
+      return errors
     },
     bwMinErrors () {
       const errors = []
       if (!this.$v.bwMinValue.$dirty) return errors
-        !this.$v.bwMinValue.required && errors.push('Bw min  is required.')
-        !this.$v.bwMinValue.minValue && errors.push('Bw min  have to be more than 0')
-        if(this.bwMinValue >= this.bwMaxValue)
-          errors.push('Bw min have to be less than Bw max')
-        return errors
+      !this.$v.bwMinValue.required && errors.push('Bw min  is required.')
+      !this.$v.bwMinValue.minValue && errors.push('Bw min  have to be more than 0')
+      if(this.bwMinValue >= this.bwMaxValue) {
+        errors.push('Bw min have to be less than Bw max')
+      }
+      return errors
     },
     bwMaxErrors () {
       const errors = []
       if (!this.$v.bwMaxValue.$dirty) return errors
         !this.$v.bwMaxValue.required && errors.push('bwMax is required.')
         !this.$v.bwMaxValue.minValue && errors.push('bwMax have to be more than 0')
-        if(this.bwMinValue >= this.bwMaxValue)
+        if(this.bwMinValue >= this.bwMaxValue) {
+          this.$v.bwMaxValue.$touch
           errors.push('Bw max have to be more than Bw min')
+        }
         return errors
     }
   },

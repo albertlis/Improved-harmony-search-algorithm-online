@@ -10,13 +10,13 @@
         <v-btn text href="/">
           <v-img
             alt="HS Logo"
-            class="shrink mr-2"
+            class="shrink mr-1"
             contain
             src="../assets/logoHS.png"
             transition="scale-transition"
             width="50" 
           />
-          <v-toolbar-title>Harmony search alghoritm</v-toolbar-title>
+          <v-toolbar-title>IHS algorithm</v-toolbar-title>
         </v-btn>
       </div>
       <v-spacer></v-spacer>
