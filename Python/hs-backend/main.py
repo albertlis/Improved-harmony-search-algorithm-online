@@ -8,6 +8,7 @@ from flask_cors import CORS, cross_origin
 from I_IHS import I_IHSAlgorithm
 from VariablesParser import evaluateError, VariablesParser
 import numpy as np
+from waitress import serve
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -112,4 +113,5 @@ def extractAlgorithmParameters():
     return params
 
 
-app.run(use_reloader=False)
+if __name__ == "__main__":
+    serve(app, host='0.0.0.0', port=80)
