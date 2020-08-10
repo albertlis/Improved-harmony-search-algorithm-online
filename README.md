@@ -9,6 +9,7 @@ Tasks:
 - Show errors hints
 - Make interactive contour plot
 - Optimize page loading time
+
 Technologies:
 - Vue.js
 - Vuetify.js
@@ -21,6 +22,7 @@ Technologies:
 ### Backend
 Tasks:
 - Modify existing desktop app
+
 Technologies:
 - Flask
 - Numpy
