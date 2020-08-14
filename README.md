@@ -1,6 +1,6 @@
 # Improved-harmony-search-alghoritm-online
 
-Works only with browsers with Brotli compression support. Check it here: https://caniuse.com/#search=brotli
+<del>Works only with browsers with Brotli compression support. Check it here: https://caniuse.com/#search=brotli</del>
 
 ### Frontend
 Tasks: 
@@ -17,7 +17,7 @@ Technologies:
 - Vuelidate
 - Vue Router
 - Vue Plotly
-- Brotli Compression
+- <del>Brotli Compression</del>
 
 ### Backend
 Tasks:
