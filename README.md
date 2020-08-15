@@ -47,7 +47,7 @@ This service was created in order to learn new technology and gaining new experi
 - Flask API - version 2.0
 - Flask-CORS - version 3.0.8
 - Numpy - version 1.19.1
-- Wairess - version 1.4.4
+- Waitress - version 1.4.4
 
 ## Setup
 * Clone this repository `git clone https://github.com/albertlis/Improved-harmony-search-algorithm-online`
