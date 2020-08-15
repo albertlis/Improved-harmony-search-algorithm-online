@@ -79,8 +79,8 @@ To run this application, you'll need [Python](https://www.python.org/downloads/)
 - Check if the introduced function is semantically correct
 - Parse arguments from function and client
 - Calculate minimum of function using improved harmony search algorithm
-- Log basic informations like trace, number of iterations eg.
-- Send JSON response with appropriate information and ststus code
+- Log basic informations like trace, number of iterations etc.
+- Send JSON response with appropriate information and status code
 
 ## Development
 Want to contribute? Great!
