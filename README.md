@@ -16,13 +16,13 @@ This service was created in order to learn new technology and gaining new experi
 
 ## Screenshots
 <p align="center">
-  <img src = "https://i.postimg.cc/Wpgs2nXc/Screenshot-1.png" width=450>
-  <img src = "https://i.postimg.cc/4xNGQTZX/Screenshot-2.png" width=450>
-  <img src = "https://i.postimg.cc/Qxqs7d26/Screenshot-3.png" width=450>
-  <img src = "https://i.postimg.cc/VkG87HLn/Screenshot-4.png" width=450>
+  <img src = "https://i.postimg.cc/Wpgs2nXc/Screenshot-1.png" width=350>
+  <img src = "https://i.postimg.cc/4xNGQTZX/Screenshot-2.png" width=350>
+  <img src = "https://i.postimg.cc/Qxqs7d26/Screenshot-3.png" width=350>
+  <img src = "https://i.postimg.cc/VkG87HLn/Screenshot-4.png" width=350>
 </p>
 <p align="center">
-  <img src = "https://i.postimg.cc/J0vXcQHL/Screenshot-5.png" width=250>
+  <img src = "https://i.postimg.cc/J0vXcQHL/Screenshot-5.png" width=200>
 </p>
 
 ## Technologies
