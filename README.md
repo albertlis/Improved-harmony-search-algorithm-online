@@ -1,4 +1,4 @@
-# Improved-harmony-search-alghoritm-online
+# Improved harmony search alghoritm online
 > Modification of an existing desktop application to run it as a web service.
 
 ## Table of contents
@@ -75,7 +75,8 @@ To run this application, you'll need [Python](https://www.python.org/downloads/)
 - Check the correctness of the data
 - Show errors hints
 - Make interactive contour plot
-- Optimize page loading time
+- Mobile support
+- <del>Optimize page loading time</del>
 ### Backend
 - Check if the introduced function is semantically correct
 - Parse arguments from function and client
@@ -98,7 +99,7 @@ To fix a bug or enhance an existing module, follow these steps:
 * Create a Pull Request
 
 ## Status
-Project is: _finished_
+Project is: _in progress_
 
 ## Contact
 albert.lis.1996@gmail.com - feel free to contact me!
