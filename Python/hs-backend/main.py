@@ -8,7 +8,7 @@ from flask_cors import CORS, cross_origin
 from I_IHS import I_IHSAlgorithm
 from VariablesParser import evaluateError, VariablesParser
 import numpy as np
-from waitress import serve
+# from waitress import serve
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -50,7 +50,7 @@ def calculateFunction():
         Z = getZMatrix(ihs)
         return json.dumps({'functionValue': functionValue, 'optimalVariables': optimalVariables,
                            'iterations': lastBestSolutionIteration, 'trace': trace, 'Z': Z}), \
-               status.HTTP_201_CREATED
+               status.HTTP_200_OK
     except ZeroDivisionError as e:
         print(e)
         return status.HTTP_400_BAD_REQUEST
@@ -62,14 +62,15 @@ def getZMatrix(ihs):
     y = np.linspace(lowBounds[1], upBounds[1], 50)
     Z = np.empty(shape=(len(x), len(y)))
     function = ihs.getFunction()
-    for i in range(len(x)):
-        for j in range(len(y)):
-            val = function(x[i], y[j])
+    for countX, i in enumerate(x):
+        print(i, type(i))
+        for countY, j in enumerate(y):
+            val = function(i, j)
             if val == np.Inf:
                 val = 1e+300
             elif val == -np.Inf:
                 val = -1e+300
-            Z[i][j] = val
+            Z[countX][countY] = val
     # Z1 = []
     # for sublist in reversed(Z.tolist()):
     #     Z1.append(list(reversed(sublist)))
@@ -113,5 +114,6 @@ def extractAlgorithmParameters():
     return params
 
 
-if __name__ == "__main__":
-    serve(app, host='0.0.0.0', port=80)
+# if __name__ == "__main__":
+#     serve(app, host='0.0.0.0', port=80)
+app.run()

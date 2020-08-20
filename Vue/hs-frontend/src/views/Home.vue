@@ -22,8 +22,9 @@
               <div class="ma-1">
               <b>Known issues:</b>
               <ul>
-                <li>Countour plot sometimes may be rotated</li>
-                <li>Plot labels are not accurate</li>
+                <!-- <li>Countour plot sometimes may be rotated</li> -->
+                <!-- <li>Plot labels are not accurate</li> -->
+                <li class="error--text">Backend service is temporarily turned off</li>
               </ul>
               </div>
           </v-card>
