@@ -86,7 +86,7 @@ To run this application, you'll need [Python](https://www.python.org/downloads/)
 - Send JSON response with appropriate information and status code
 
 ## TODO
-- Write unit test
+- Write unit tests
 - Write a code documentation
 - Write API documentation
 - Move backend service from AWS EC2 instance to AWS Lambda
