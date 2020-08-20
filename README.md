@@ -8,6 +8,7 @@
 * [Libraries](#libraries)
 * [Setup](#setup)
 * [Features](#features)
+* [TODO](#todo)
 * [Development](#development)
 * [Status](#status)
 * [Contact](#contact)
@@ -83,6 +84,12 @@ To run this application, you'll need [Python](https://www.python.org/downloads/)
 - Calculate minimum of function using improved harmony search algorithm
 - Log basic informations like trace, number of iterations etc.
 - Send JSON response with appropriate information and status code
+
+## TODO
+- Write unit test
+- Write a code documentation
+- Write API documentation
+- Move backend service from AWS EC2 instance to AWS Lambda
 
 ## Development
 Want to contribute? Great!
