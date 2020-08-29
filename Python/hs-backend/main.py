@@ -1,11 +1,9 @@
 # !/usr/bin/python3
 import json
-
 from flask import Flask, jsonify, request
 from flask_api import status
 from flask_cors import CORS, cross_origin
-
-from I_IHS import I_IHSAlgorithm
+from IHS import IHSAlgorithm
 from VariablesParser import evaluateError, VariablesParser
 import numpy as np
 # from waitress import serve
@@ -38,9 +36,9 @@ def calculateFunction():
     p = VariablesParser(algorithmParameters['function'])
     variables = p.getVariables()
     variablesBandwidth = getVariablesBandwidth(variables)
-    ihs = I_IHSAlgorithm(algorithmParameters)
+    ihs = IHSAlgorithm(algorithmParameters)
     for i, variable in enumerate(variables):
-        ihs.setBounds(i, variablesBandwidth[variable+'min'], variablesBandwidth[variable+'max'])
+        ihs.IHSParameters.setBounds(i, variablesBandwidth[variable+'min'], variablesBandwidth[variable+'max'])
     try:
         ihs.doYourTask()
         functionValue, optimalVariables = ihs.getOptimalSolution()
@@ -57,13 +55,13 @@ def calculateFunction():
 
 
 def getZMatrix(ihs):
-    lowBounds, upBounds = ihs.getBounds()
+    lowBounds, upBounds = ihs.IHSParameters.getBounds()
     x = np.linspace(lowBounds[0], upBounds[0], 50)
     y = np.linspace(lowBounds[1], upBounds[1], 50)
     Z = np.empty(shape=(len(x), len(y)))
-    function = ihs.getFunction()
+    function = ihs.IHSParameters.getFunction()
     for countX, i in enumerate(x):
-        print(i, type(i))
+        # print(i, type(i))
         for countY, j in enumerate(y):
             val = function(i, j)
             if val == np.Inf:

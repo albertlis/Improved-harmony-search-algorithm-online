@@ -5,96 +5,68 @@ Created on Thu Mar 26 17:10:54 2020
 @author:
     Adrian Czupak & Albert Lis
 """
-from pprint import pprint
 
 import numpy as np
-from flask import jsonify
-
-'''
-
-    IHSAlgorithm to klasa obsługująca całą logikę algorytmu z założeniem,
-że zostały do niej wprowadzone dobre dane (zapewnia to Child Class
-I_IHSAlgorithm)
-
-'''
-
-import copy
 from random import uniform
-from VariablesParser import *
+from IHSParameters import IHSParameters
 
 
 class IHSAlgorithm:
-    def __init__(self):
-        self._HM = []  # Harmony Memory
-        self._HMS = 4  # Harmony Memory Size
-        self._HMCRmax = 0.9  # Harmony Memory Considering Rate
-        self._HMCRmin = 0.1
-        self._PARmax = 1  # Pitch Adjusting Rate
-        self._PARmin = 0.1
-        self._BWmax = 10  # Band Width
-        self._BWmin = 0.0001
-        self._NumOfIterations = 1000  # Max Iteration Times
-        self._variables = []
-        self._varUpperBounds = []
-        self._varLowerBounds = []
-        self._f = np.empty(self._HMS)
+    def __init__(self, parameters):
+        self.IHSParameters = IHSParameters(parameters)
         self._generation = 0
-        self._objective_function = lambda X: sum(X)
-        self.compute = lambda X: self._objective_function(X)
         self._trace = []
         self._lastBestSolutionIteration = 0
+        self._HM = []  # Harmony Memory
+        self._f = np.empty(self.IHSParameters.getHMS())
                 
     def initializeHM(self):
         def catchZeroDivision(i):
             inputVector = {}
-            for counter, var in enumerate(self._variables):
-                inputVector.update({var: uniform(self._varLowerBounds[counter], self._varUpperBounds[counter])})
+            varLowerBounds, varUpperBounds = self.IHSParameters.getBounds()
+            for counter, var in enumerate(self.IHSParameters.getVariables()):
+                inputVector.update({var: uniform(varLowerBounds[counter], varUpperBounds[counter])})
             self._HM.append(inputVector)
             try:
-                self._f[i] = self.compute(self, inputVector)
+                self._objective_function = self.IHSParameters.getObjectiveFunction()
+                self._f[i] = self.IHSParameters.getCompute()(self, inputVector)
             except ZeroDivisionError or RuntimeWarning:
                 print("Nie wolno '/0' - Nununu")
                 raise
-                
-        self._f = np.empty(self._HMS)
-        for i in range(self._HMS):
+        HMS = self.IHSParameters.getHMS()
+        self._f = np.empty(HMS)
+        for i in range(HMS):
             catchZeroDivision(i)
-                
 
     def improvise(self):
         new = {}
-        for i, variables in enumerate(self._variables):
-            upperBound = self._varUpperBounds[i]
-            lowerBound = self._varLowerBounds[i]
+        lowerBounds, upperBounds = self.IHSParameters.getBounds()
+        for i, variables in enumerate(self.IHSParameters.getVariables()):
+            lowerBound = lowerBounds[i]
+            upperBound = upperBounds[i]
             # memoryConsideration
-            if uniform(0, 1) < self._HMCR:
-                D1 = int(uniform(0, self._HMS))
+            if uniform(0, 1) < self.IHSParameters.getHMCR():
+                D1 = int(uniform(0, self.IHSParameters.getHMS()))
                 D2 = self._HM[D1].get(variables)
                 new.update({variables: D2})
 
                 # pitchAdjustment
-                if uniform(0, 1) < self._PAR:
+                if uniform(0, 1) < self.IHSParameters.getPAR():
+                    BW = self.IHSParameters.getBW()
                     if uniform(0, 1) < 0.5:
-                        D3 = (new.get(variables) -
-                              uniform(0, self._BW)
-                              )
+                        D3 = (new.get(variables) - uniform(0, BW))
                         if lowerBound <= D3:
                             new.update({variables: D3})
                     else:
-                        D3 = (new.get(variables) +
-                              uniform(0, self._BW)
-                              )
+                        D3 = (new.get(variables) + uniform(0, BW))
                         if upperBound >= D3:
                             new.update({variables: D3})
-
             else:
-                new.update({variables: uniform(lowerBound,
-                                                upperBound )})
-
+                new.update({variables: uniform(lowerBound, upperBound)})
         return new
 
     def updateHM(self, new):
-        f = self.compute(self, new)
+        f = self.IHSParameters.getCompute()(self, new)
         # for finding minimum
         fMaxValue = np.amax(self._f)
         if f < fMaxValue:
@@ -114,32 +86,20 @@ class IHSAlgorithm:
     def doYourTask(self):
         def catchZeroDivision():
             try:
-                new = self.improvise()  # (self._generation - 1) % self._HMS
+                new = self.improvise()  # (self._generation - 1) % self.IHSParameters.getHMS()
                 self.updateHM(new)
             except ZeroDivisionError or RuntimeWarning:
                 print('i caughed ZeroDiv in IHS.updateHM')
                 catchZeroDivision()
                 
         self.initializeHM()
-        while self._generation < self._NumOfIterations:
+        while self._generation < self.IHSParameters.getNumOfIterations():
             self._generation += 1
-            self._updateHMCR()
-            self._updatePAR()
-            self._updateBW()
+            self.IHSParameters.updateHMCR(self._generation)
+            self.IHSParameters.updatePAR(self._generation)
+            self.IHSParameters.updateBW(self._generation)
             catchZeroDivision()
             self._findTrace()
-
-    def _updateHMCR(self):
-        self._HMCR = (self._HMCRmax - self._generation *
-                      (self._HMCRmax - self._HMCRmin) / self._NumOfIterations)
-
-    def _updatePAR(self):
-        self._PAR = (self._PARmin + self._generation *
-                     (self._PARmax - self._PARmin) / len(self._variables))
-
-    def _updateBW(self):
-        c = log(self._BWmin / self._BWmax)
-        self._BW = self._BWmax * exp(self._generation * c)
 
     def getOptimalSolution(self):
         index = np.argmin(self._f)

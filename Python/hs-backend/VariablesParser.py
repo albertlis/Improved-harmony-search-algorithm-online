@@ -5,33 +5,23 @@ Created on Fri Mar 27 14:24:13 2020
 @author: Adrian Czupak
 """
 
+import VP_WrongExpression
+import functionsReferences
 
-from math import *
-
-
-
-#to żeby odczytywało funkcje zapisywane na rozne sposoby
-def root(a, b): return pow(a, 1/b)
-def ctan(x): return 1/tan(x)
-def ctg(x): return ctan(x)
-def tg(x): return tan(x)
-def ln(x): return log(x)
-
-class VP_WrongExpression(Exception):
-    pass
 
 class VariablesParser:
-    def __init__(self, string, constants={}):
-        self.__string = string
+    def __init__(self, string, constants=None):
+        if constants is None:
+            constants = {}
+        self.__string = self.__deleteWhitespaces(string)
         self.__index = 0
         self.__constants = {
-            'pi' : 3.141592653589793,
-            'e' : 2.718281828459045 }
+            'pi': 3.141592653589793,
+            'e': 2.718281828459045}
         self.__variables = []
         for var in constants.keys():
-            if self.__constants.get(var) == None:
+            if self.__constants.get(var) is None:
                 self.__constants[var] = constants[var]
-        self.__deleteWhitespaces()
     
     def getVariables(self):
         self.__parse()
@@ -52,19 +42,14 @@ class VariablesParser:
                 else:
                     err = "Unexpected character: '" + self.__string[self.__index: ind] + "'"
                     raise VP_WrongExpression(err)
-            
-            
         return self.__variables
     
-    def __deleteWhitespaces(self):
-        string = ""
-        for i in range(0, len(self.__string)):
-            if self.__string[i] not in " \n\t\r":
-                string += self.__string[i]
-        self.__string = string 
+    def __deleteWhitespaces(self, string):
+        string = string.strip()
+        return string.replace(" ", "")
 
     def __parse(self):
-        return self.__parseAddition()
+        self.__parseAddition()
     
     def __parseAddition(self):
         self.__parseMultiplication()
@@ -180,7 +165,6 @@ class VariablesParser:
             if char == '':
                 raise Exception("Unexpected equation ending")
             else:
-                #to jest raczej wykluczone przez __parseValue() ...
                 raise Exception("There should be a number")
 
     def __parseVariable(self):
@@ -203,12 +187,12 @@ class VariablesParser:
     def __hasNext(self):
         return self.__index < len(self.__string)
     
-    
-#ta funkcja do dopasowania do programu
-def evaluateError(expression, constants={}):
+
+def evaluateError(expression, constants=None):
+    if constants is None:
+        constants = {}
     outputStr, code = "Function was not given", 1
     if expression != '':
-        outputStr, code = "Robie", 2
         try:
             p = VariablesParser(expression, constants)
             variables = p.getVariables()

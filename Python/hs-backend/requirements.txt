@@ -3,3 +3,4 @@ Flask-API
 Flask-Cors
 numpy
 waitress
+pytest

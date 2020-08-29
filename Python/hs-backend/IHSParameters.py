@@ -1,53 +1,12 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Mar 23 09:27:20 2020
-
-@author:
-    Adrian Czupak & Albert Lis
-"""
-
-'''
-
-    Klasa I_IHSAlgorithm czysci wejscie z GUI i wprowadza do IHSAlgorithm
-
-    Teraz jeszcze próbuję ogarnąć jak zapisać HarmonyMemory (__HM), żeby można
-było jakos logicznie je iterować (I mean sth. like self.__variables['x1'][1])
-(patrz: implementacja I_IHSAlgorithm.setFunction() -> przekazywanie argumentów
-do wyrażenia lambda)
+from math import log, exp
+from VariablesParser import VariablesParser
 
 
-'''
-from IHS import *
-
-class I_IHSAlgorithm(IHSAlgorithm):
+class IHSParameters:
     def __init__(self, parameters):
-        """
-        
-
-        Parameters
-        ----------
-        parameters : list of algortihm parameter
-            [0] = function ( eg. x+1*sin(2*pi*x2) )
-            [1] = NumOfIterations - Number Of Iterations
-            [2] = HMS - Hmarmony Memory Size
-            [3] = HMCRmin - Minimum Harmony Memory Considering Rate
-                    - between [0; 1]
-            [4] = HMCRmax - Maximum HMCR
-                    - between [0; 1]
-            [5] = PARmin
-                    - between [0; 1]
-            [6] = PARmax
-                    - between [0; 1]
-            [7] = BWmin > 0
-            [8] = BWmax > 0
-            
-        Returns
-        -------
-        None.
-
-        """
-        IHSAlgorithm.__init__(self)
         assert len(parameters) == 9
+        self._varUpperBounds = []
+        self._varLowerBounds = []
         self.setHMCR([parameters['hcmrmin'], parameters['hcmrmax']])
         self.setPAR([parameters['parmin'], parameters['parmax']])
         self.setBW([parameters['bwmin'], parameters['bwmax']])
@@ -57,7 +16,18 @@ class I_IHSAlgorithm(IHSAlgorithm):
         self._setDefaultBounds()
         self.setFunction(parameters['function'])
 
-    # W setterach poustawiać granice w jakich mogą się znaleźć dane parametry
+    def updateHMCR(self, generation):
+        self._HMCR = (self._HMCRmax - generation *
+                      (self._HMCRmax - self._HMCRmin) / self._NumOfIterations)
+
+    def updatePAR(self, generation):
+        self._PAR = (self._PARmin + generation *
+                     (self._PARmax - self._PARmin) / len(self._variables))
+
+    def updateBW(self, generation):
+        c = log(self._BWmin / self._BWmax)
+        self._BW = self._BWmax * exp(generation * c)
+
     def setHMCR(self, HMCR):
         self._setPair('HMCR', 0, 1, HMCR)
 
@@ -109,9 +79,6 @@ class I_IHSAlgorithm(IHSAlgorithm):
             # messageBox
             print(ex.args)
 
-    def getVariables(self):
-        return self._variables
-
     def setFunction(self, inputBoxExpression):
         strOfVars = ''
         strOfVarsFinal = ''
@@ -138,26 +105,30 @@ class I_IHSAlgorithm(IHSAlgorithm):
 
     def getBounds(self):
         return self._varLowerBounds, self._varUpperBounds
+
     def getFunction(self):
         return self._objective_function
 
+    def getHMS(self):
+        return self._HMS
 
+    def getObjectiveFunction(self):
+        return self._objective_function
 
-if __name__ == "__main__":
-    def initIHS(HMS, HMCR, PAR, BW, NumOfIterations, function):
-        # HMCR = [min, max] ...
-        ihs = I_IHSAlgorithm([function, NumOfIterations, HMS, HMCR[0], HMCR[1], PAR[0],
-                              PAR[1], BW[0], BW[1]])
-        ihs.doYourTask()
-        # dodac funkcje zwracania wynikow.
+    def getCompute(self):
+        return self.compute
 
-        return ihs
+    def getVariables(self):
+        return self._variables
 
+    def getPAR(self):
+        return self._PAR
 
-    NumOfIterations = 200000
+    def getBW(self):
+        return self._BW
 
-    ihs = initIHS(10, [0.85, 0.95], [0.2, 0.8], [0.00001, 0.2], NumOfIterations,
-                  "2 * pow(x1, 2) + pow(x2 - 3, 2) + 5")
+    def getNumOfIterations(self):
+        return self._NumOfIterations
 
-    print(ihs._f)
-    print(ihs._HM)
+    def getHMCR(self):
+        return self._HMCR
