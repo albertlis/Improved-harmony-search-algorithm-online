@@ -53,9 +53,11 @@ class IHSParameters:
         except ValueError:
             raise ValueError(parameter + " its floats but something went wrong")
 
-        assert parameterMin <= parameterMax, parameter + ": parameterMin should be <= parameterMax"
         assert parameterMin >= minLimit, parameter + ": parameterMin should be >= minLimit"
+        assert parameterMin <= maxLimit, parameter + ": parameterMin should be <= maxLimit"
         assert parameterMax <= maxLimit, parameter + ": parameterMax should be <= maxLimit"
+        assert parameterMax >= minLimit, parameter + ": parameterMax should be >= minLimit"
+        assert parameterMin <= parameterMax, parameter + ": parameterMin should be <= parameterMax"
         exec('self._' + parameter + 'max = parameterMax')
         exec('self._' + parameter + 'min = parameterMin')
 
@@ -131,4 +133,4 @@ class IHSParameters:
         return self._NumOfIterations
 
     def getHMCR(self):
-        return self._HMCR
+        return self._HMCRmin, self._HMCRmax
