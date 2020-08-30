@@ -62,17 +62,13 @@ class IHSParameters:
         exec('self._' + parameter + 'min = parameterMin')
 
     def _setInteger(self, parameter, value):
-        try:
-            value = int(value)
-        except:
-            raise Exception(parameter + " should be an integer")
+        assert isinstance(value, int), f'{parameter} should be an integer'
+        assert value >= 1, f'{parameter} should be bigger than 1'
+        exec('self._' + parameter + ' = value')
 
-        if value <= 1:
-            raise Exception(parameter + " should be bigger than 1")
-        else:
-            exec('self._' + parameter + ' = value')
-
-    def setVariables(self, expression, constants={}):
+    def setVariables(self, expression, constants=None):
+        if constants is None:
+            constants = {}
         try:
             p = VariablesParser(expression, constants)
             variables = p.getVariables()
@@ -124,10 +120,10 @@ class IHSParameters:
         return self._variables
 
     def getPAR(self):
-        return self._PAR
+        return self._PARmin, self._PARmax
 
     def getBW(self):
-        return self._BW
+        return self._BWmin, self._BWmax
 
     def getNumOfIterations(self):
         return self._NumOfIterations
