@@ -67,8 +67,13 @@ $ npm start
 ```
 ### Backend
 To run this application, you'll need [Python](https://www.python.org/downloads/) installed on your computer.
-* Install necessary Backend Python [libraries](#libraries)
-* Run application `python main.py`
+* Install Virtual Environment: `pip install virtualenv'
+* Create Virtual Environment: `python -m venv venv-name`
+* Activate Virtual Environment:
+  - On Unix or MacOS, run: `source venv-name/bin/activate`
+  - On Windows run: `venv-name\Scripts\activate.bat`
+* Install necessary [libraries](#libraries): `pip install -r requirements.txt`
+* Run application: `python main.py`
 
 ## Features
 ### Frontend
