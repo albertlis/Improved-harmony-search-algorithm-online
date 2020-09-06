@@ -8,6 +8,7 @@
 * [Libraries](#libraries)
 * [Setup](#setup)
 * [Features](#features)
+* [Documentation](#documentation)
 * [TODO](#todo)
 * [Development](#development)
 * [Status](#status)
@@ -36,6 +37,7 @@ This service was created in order to learn new technology and gaining new experi
 - Vuetify.js - version 2.3.8
 ### Backend
 - Python - version 3.8.5
+- Doxygen - version 1.8.20
 
 ## Libraries
 ### Frontend
@@ -90,6 +92,10 @@ To run this application, you'll need [Python](https://www.python.org/downloads/)
 - Log basic informations like trace, number of iterations etc.
 - Send JSON response with appropriate information and status code
 
+## Documentation
+#### Status: _in progress_
+[Docs](https://albertlis.github.io/Improved-harmony-search-algorithm-online/)
+
 ## TODO
 - Write unit tests
 - Write a code documentation
@@ -105,6 +111,8 @@ To fix a bug or enhance an existing module, follow these steps:
 * Create a new branch (`git checkout -b improve-feature`)
 * Make the appropriate changes in the files
 * Verify if they are correct
+* Make Doxygen docstrings
+* Generate Doxygen documentation (inside doc folder: `doxygen Doxyfile`)
 * Add changes to reflect the changes made
 * Commit changes
 * Push to the branch (`git push origin improve-feature`)
