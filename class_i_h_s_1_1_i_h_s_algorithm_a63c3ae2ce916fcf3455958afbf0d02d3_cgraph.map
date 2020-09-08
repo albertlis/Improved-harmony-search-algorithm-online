@@ -1,0 +1,9 @@
+<map id="doYourTask" name="doYourTask">
+<area shape="rect" id="node1" title="This function is main loop of algorithm." alt="" coords="5,81,100,108"/>
+<area shape="rect" id="node2" href="$class_i_h_s_1_1_i_h_s_algorithm.html#a0d21710db99015d3ca41818ad8220ffc" title="The function is responsible for tracking algorithm trace." alt="" coords="151,5,245,32"/>
+<area shape="rect" id="node3" href="$class_i_h_s_1_1_i_h_s_algorithm.html#a25054ee071aa99d727b3340c36b777ec" title="The function is responsible for the improvisation step of the algorithm." alt="" coords="155,56,241,83"/>
+<area shape="rect" id="node6" href="$class_i_h_s_1_1_i_h_s_algorithm.html#a00b2e3d7f2c977a8806ec40ab8234c59" title="The function used to initialize harmony memory." alt="" coords="148,107,248,133"/>
+<area shape="rect" id="node7" href="$class_i_h_s_1_1_i_h_s_algorithm.html#a200e781ae7337b7e777477d834fec408" title="The function is responsible for updating harmony memory." alt="" coords="153,157,243,184"/>
+<area shape="rect" id="node4" href="$class_i_h_s_1_1_i_h_s_algorithm.html#a56f63f30f097be43a554b565ec9579fe" title="The function is responsible for the generating new values of memory consideration parameter." alt="" coords="296,31,512,57"/>
+<area shape="rect" id="node5" href="$class_i_h_s_1_1_i_h_s_algorithm.html#a2ca85f01f99118c8c8519abc0353f56d" title="The function is responsible for the generating new values of pitch adjustment parameter." alt="" coords="315,81,493,108"/>
+</map>
