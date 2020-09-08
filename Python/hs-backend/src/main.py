@@ -55,6 +55,9 @@ def calculateFunction():
 
 
 def getZMatrix(ihs):
+    """! The function is responsible for the generating Z-axis matrix for countour plot.
+    @param[in] ihs IHSAlgorithm instance.
+    @return 2D List: 50x50 calculated Z-axis matrix."""
     lowBounds, upBounds = ihs.IHSParameters.getBounds()
     x = np.linspace(lowBounds[0], upBounds[0], 50)
     y = np.linspace(lowBounds[1], upBounds[1], 50)
@@ -77,6 +80,9 @@ def getZMatrix(ihs):
 
 
 def convertTrace(tempTrace):
+    """! The function is responsible for converting calculated trace to to a form suitable for dispatch.
+    @param[in] tempTrace calculated trace.
+    @return Dictonary: converted trace."""
     trace = dict()
     for key in tempTrace[0].keys():
         tr = list()
@@ -87,6 +93,9 @@ def convertTrace(tempTrace):
 
 
 def getVariablesBandwidth(variables):
+    """! The function is responsible for extracting variables lower and upper bounds from HTTP request.
+    @param[in] variables variables extracted from user defined function.
+    @return Dictonary: variables names with values."""
     variableValues = dict()
     for variable in variables:
         minName = variable + 'min'
@@ -99,6 +108,8 @@ def getVariablesBandwidth(variables):
 
 
 def extractAlgorithmParameters():
+    """! The function is responsible for extracting algorithm parameters from HTTP request.
+    @return Dictonary: extracted parameters with values."""
     params = dict()
     params['function'] = request.args.get('function', type=str).replace(' ', '+')
     params['iterations'] = request.args.get('iterations', type=int)
