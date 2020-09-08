@@ -2,8 +2,8 @@ var class_i_h_s_1_1_i_h_s_algorithm =
 [
     [ "__init__", "class_i_h_s_1_1_i_h_s_algorithm.html#a1e08eebece4d77bd0f5a2f9ad37fc1ac", null ],
     [ "__findTrace", "class_i_h_s_1_1_i_h_s_algorithm.html#a0d21710db99015d3ca41818ad8220ffc", null ],
-    [ "__makeMemoryConsideration", "class_i_h_s_1_1_i_h_s_algorithm.html#af8ecd81b9e3c9a5f821bba7ec367bf0a", null ],
-    [ "__makePitchAdjustment", "class_i_h_s_1_1_i_h_s_algorithm.html#ac7ea4203be4a94f064b737f6b504327e", null ],
+    [ "__makeMemoryConsideration", "class_i_h_s_1_1_i_h_s_algorithm.html#a56f63f30f097be43a554b565ec9579fe", null ],
+    [ "__makePitchAdjustment", "class_i_h_s_1_1_i_h_s_algorithm.html#a2ca85f01f99118c8c8519abc0353f56d", null ],
     [ "doYourTask", "class_i_h_s_1_1_i_h_s_algorithm.html#a63c3ae2ce916fcf3455958afbf0d02d3", null ],
     [ "getLastBestSolutionIteration", "class_i_h_s_1_1_i_h_s_algorithm.html#aebd9a0ecb09e19cc8caf38fb78f07bb7", null ],
     [ "getOptimalSolution", "class_i_h_s_1_1_i_h_s_algorithm.html#a3f3bf084ff1f457016c6e684996db295", null ],
