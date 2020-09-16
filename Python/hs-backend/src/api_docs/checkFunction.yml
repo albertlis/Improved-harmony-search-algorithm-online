@@ -1,0 +1,25 @@
+Endpoint checks correctness of function.
+This endpoint checks correctness of function and returns a message from VariablesParser and  variables extracted
+from function.
+---
+parameters:
+  - name: function
+    in: query
+    type: string
+    required: true
+responses:
+  200:
+    description: Message from Variables Parser and extracted variables
+    schema:
+      type: object
+      properties:
+       message:
+        type: string
+        example: 'Found variables: x1, x2'
+       variables:
+        type: array
+        items:
+          type: string
+        example: ['x1', 'x2']
+  400:
+    description: Error message from Variables Parser

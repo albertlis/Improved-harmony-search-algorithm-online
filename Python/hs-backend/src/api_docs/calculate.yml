@@ -1,0 +1,114 @@
+Calculates function
+This endpoint calculates function and returns solution informations.
+---
+parameters:
+  - name: function
+    in: query
+    type: string
+    required: true
+  - name: iterations
+    in: query
+    type: integer
+    required: true
+  - name: hms
+    in: query
+    type: integer
+    required: true
+  - name: hcmrmin
+    in: query
+    type: number
+    required: true
+  - name: hcmrmax
+    in: query
+    type: number
+    required: true
+  - name: parmin
+    in: query
+    type: number
+    required: true
+  - name: parmax
+    in: query
+    type: number
+    required: true
+  - name: bwmin
+    in: query
+    type: number
+    required: true
+  - name: bwmax
+    in: query
+    type: number
+    required: true
+  - name: val1min
+    in: query
+    type: number
+    required: true
+    description: Lower bound of variable. One per each variable in function.
+  - name: val1max
+    in: query
+    type: number
+    required: true
+    description: Upper bound of variable. One per each variable in function.
+responses:
+  200:
+    description: Solution info
+    schema:
+      type: object
+      properties:
+        functionValue:
+          type: number
+          example: -13.124571055589907
+        optimalVariables:
+          type: array
+          items:
+            type: object
+            description: Dictonary
+            properties:
+              variableName:
+                type: number
+          example:
+            x1: 2.056794979937136
+            x2: -0.5034624216828103
+        iterations:
+          type: integer
+          example: 52876
+        trace:
+          type: array
+          items:
+            type: object
+            description: Dictonary
+            properties:
+              variableName:
+                type: array
+                items:
+                  type: number
+          example:
+            x1: [ 1.5247783280936131,
+                  1.5247783280936131,
+                  -1.3375044341205147,
+                  0.24122896884194223,
+                  0.48810947872211763]
+            x2: [ -2.364880085079548,
+                  -1.7888383665119703,
+                  1.976725353655839,
+                  -2.364880085079548,
+                  -1.7888383665119703]
+        Z:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+          example:
+            [[ 6420.833333333333,
+               6035.9661974165865,
+               ...,
+               5697.095445416648,
+               5400.390936449207],
+              ...,
+            [ 2946.630129672782,
+              2945.6166775171905,
+              ...,
+              2944.637918666712,
+              2943.693853121345]]
+  404:
+    description: Bad request
