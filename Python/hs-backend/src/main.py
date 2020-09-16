@@ -6,9 +6,11 @@ from flask_cors import CORS, cross_origin
 from IHS import IHSAlgorithm
 from VariablesParser import evaluateError, VariablesParser
 import numpy as np
+from flasgger import Swagger
 # from waitress import serve
 
 app = Flask(__name__)
+swagger = Swagger(app)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
@@ -16,6 +18,24 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 @app.route('/checkfunction', methods=['GET'])
 @cross_origin()
 def checkFunction():
+    """Endpoint checks correctness of function.
+    This endpoint checks correctness of function and returns a message from VariablesParser and  variables extracted
+    from function.
+    ---
+    parameters:
+      - name: function
+        in: query
+        type: string
+        required: true
+    responses:
+      200:
+        description: Message from Variables Parser and extracted variables
+        schema:
+            message: 'Found variables: x1, x2'
+            variables: ['x1', 'x2']
+      400:
+        description: Error message from Variables Parser
+    """
     function = request.args.get('function', type=str).replace(' ', '+')
     message, error = evaluateError(function)
     if error:
@@ -28,6 +48,108 @@ def checkFunction():
 @app.route('/calculate', methods=['GET'])
 @cross_origin()
 def calculateFunction():
+    """Calculates function
+    This endpoint calculates function and returns solution informations.
+        ---
+        parameters:
+          - name: function
+            in: query
+            type: string
+            required: true
+          - name: iterations
+            in: query
+            type: integer
+            required: true
+          - name: hms
+            in: query
+            type: integer
+            required: true
+          - name: hcmrmin
+            in: query
+            type: number
+            required: true
+          - name: hcmrmax
+            in: query
+            type: number
+            required: true
+          - name: parmin
+            in: query
+            type: number
+            required: true
+          - name: parmax
+            in: query
+            type: number
+            required: true
+          - name: bwmin
+            in: query
+            type: number
+            required: true
+          - name: bwmax
+            in: query
+            type: number
+            required: true
+          - name: val1min
+            in: query
+            type: number
+            required: true
+            description: Lower bound of variable. One per each variable in function.
+          - name: val1max
+            in: query
+            type: number
+            required: true
+            description: Upper bound of variable. One per each variable in function.
+        responses:
+          200:
+            description: Solution info
+            schema:
+              type: object
+              properties:
+                functionValue:
+                  type: number
+                optimalVariables:
+                  type: array
+                  items:
+                    type: object
+                    description: Dictonary
+                    properties:
+                      variableName:
+                        type: number
+                iterations:
+                  type: integer
+                trace:
+                  type: array
+                  items:
+                    type: object
+                    description: Dictonary
+                    properties:
+                      variableName:
+                        type: array
+                        items:
+                          type: number
+                Z:
+                  type: array
+                  items:
+                    type: array
+                    items:
+                      type: number
+            examples:
+              functionValue: 13.124571055589907
+              optimalVariables: [
+                x2: 0.5034624216828103,
+                x1: 2.056794979937136 ]
+              iterations: 24297
+              trace: [
+                x1: [1.12, 2.12, 3.31],
+                x2: [1.21, 2.12, 3.31]
+              ]
+              Z: [
+                [1,2,3],
+                [1,2,3],
+                [1,2,3]
+              ]
+          404:
+            description: Bad request
+        """
     algorithmParameters = extractAlgorithmParameters()
     print(algorithmParameters)
     message, error = evaluateError(algorithmParameters['function'])
